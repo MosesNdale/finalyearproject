@@ -1,2 +1,2 @@
 # finalyearproject
-Website about personalised transport planner
+This website about personalised transport planner that uses python, jupyter notebook and flask.
