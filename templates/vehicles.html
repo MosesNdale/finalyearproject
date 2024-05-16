@@ -1,0 +1,54 @@
+{% extends "layout.html" %} <!-- This extends the layout.html template as parent to another template, which is this template as child -->
+{% block content %} <!-- This is the opening block allowing contents of program codes to be written below -->
+<!-- This is the settings as the style for creating the background image of the website -->
+<style>
+    body{
+        background-image:url('static/wallpaper.jpeg');
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+    }
+</style>
+<!-- This is the header to give the title as a purpose of this website page -->
+<h3 style="border: 2px solid black; background-color:white;">TFL Vehicle API using ids of vehicles for search.</h3>
+<!-- This is the paragraph providing information about serching for  from TFL with a link to read this API in JSON -->
+<p style="border: 2px solid black; background-color:white;">This information about the TFL Vehicle API is written in human-readable format about getting the Id of a vehicle to see the result of the predicted arrival of a transport, to read the information about the transports from TFL in machine-readable format as the API, click <a href="{{ url_for('vehicle_form') }}" title="This is the machine-readable format link to view the parameters for the TFL Road API about the transportation of vehicles (using its ID).">here</a>.</p>
+<!-- This is the form created for getting the predicted transport arrival by entering the Id of a vehicle from the transport mode given and submitting the button to get the response -->
+<form action="{{ url_for('vehicle') }}" method="post">
+    <label for="vehicle_ids" style="border: 1px solid black; background-color:white;">Enter an ID of a vehicle:</label>
+    <input type="text" name="vehicle_ids" id="vehicle_ids" required>
+    <button style="border:2px solid black; background-color:white;" type="button" title="If you need help to enter the Id of a vehicle, read here">Click <a href="{{ url_for('line_arrival') }}">here</a> to get the Id of a vehicle available.</button>
+    <br><br>
+    <button type="submit">This gets the predictions for a given list of vehicle Id's. Press this submit button here to get your result after you have completed this form.</button>
+</form>
+<!-- This opens the unordered list using for loops to display list of predicted transport arrivals after entering the Id of a vehicle to search from the form -->
+<div>    
+    <ul style="border: 2px solid black; background-color:white;">
+        {% for Vehicles in data %}
+            <li style="border: 2px solid black; background-color:white;">
+                <span>Type of API: {{ Vehicles["$type"] }}</span>
+                <p>Name of line: {{ Vehicles["lineName"] }}</p>
+                <p>Name of transport mode: {{ Vehicles["modeName"] }}</p>
+                <p>Live time of station: {{ Vehicles["timeToLive"] }}</p> 
+                {% if "currentLocation" in Vehicles %}
+                <p>Current location of transport: {{ Vehicles["currentLocation"] }}</p>
+                {% endif %}
+                <p>This location of vehicle is towards: {{ Vehicles["towards"] }}</p>
+                {% set seconds = Vehicles["timeToStation"] %} <!--This was the calculation to convert from seconds to minutes -->
+                {% set minutes = seconds //60 %}
+                {% if minutes == 0 %} <!-- These are if and else statements used here -->
+                <p><strong>Station time of vehicle arrival: Due</strong></p>
+                {% else %}
+                <p><strong>Station time of vehicle arrival is in: {{ minutes }} minutes</strong></p>
+                {% endif %}
+                <p>Expected arrival of vehicle to station: {{ Vehicles["expectedArrival"] }}</p>
+                <p>Vehicle Id: {{ Vehicles["vehicleId"] }}</p>
+                <p>Name of station: {{ Vehicles["stationName"] }}</p>
+                <p>Platform: {{ Vehicles["platformName"] }}</p>
+                <p>Name of station destination: {{ Vehicles["destinationName"] }}</p>
+                <p>Direction: {{ Vehicles["direction"] }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock content %} <!-- This is the closing block that does not allow more content of program codes to be entered above-->

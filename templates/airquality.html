@@ -1,0 +1,74 @@
+{% extends "layout.html" %} <!-- This extends the layout.html template as parent to another template, which is this template as child-->
+{% block content %} <!-- This is the opening block allowing contents of program codes to be written in -->
+<!-- This is the settings as the style for creating the background image of the website -->
+<style>
+    body{
+        background-image:url('static/wallpaper.jpeg');
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+    }
+</style>
+<!-- This is the header to give the title as a purpose of this website page -->                 
+<h3 style="border: 2px solid black; background-color:white;">TFL API for air quality forecast</h3>
+<!-- This is the paragraph provididng the information about the air quality forecast with a link to read this API in JSON -->
+<p style="border: 2px solid black; background-color:white;">This information about the API air quality from TFL is written in human-readable format, to read the information about air quality from TFL in machine-readable format as the API, click <a href="{{ url_for('weatherandtemp_info') }}" title="This is the machine-readable format link to view the parameters for the TFL API air quality.">here</a>.</p>
+<!-- This is the paragraph providing the explanation of the air quality forecast parameters -->
+<p style="border: 2px solid black; background-color:white;"><strong><u>Parameters for the air quality forecast (Explanation)</u></strong> <br>The <strong>"$type"</strong> forecast parameter: are used for object typing to represent the type of TFL API that is used for data collection, they are commonly found in systems using object-relational mapping (ORM) or similar technologies. <br>The <strong>"updatePeriod"</strong> forecast parameter: Means how often the information about the weather forecast is updated every hour as the time. <br>The <strong>"updateFrequency"</strong> forecast parameter: Is the changes and additions that are made to the existing data of the TFL API about air quality forecast that occurs one time after the initial data is completed.<br>The <strong>"forecastURL"</strong> forecast parameter: Provides a URL (http://londonair.org.uk/forecast) where additional forecast information can be accessed. <br>The <strong>"disclaimerText"</strong> forecast parameter: Contains a disclaimer explaining the purpose and limitations of the forecast. <br>The <strong>"currentForecast"</strong> forecast parameter: This is an array containing forecast information for the current and future periods.<br>The <strong>"forecastType"</strong> forecast parameter: Specifies whether the forecast is for the current period or the future which can be tomorrow or a few days later during the current month.<br> The <strong>"forecastID"</strong> forecast parameter: An identifier for the forecast. <br>The <strong>"forecastBand"</strong> forecast parameter: Indicates the pollution level band for the pollutants of the air pollution. <br>The <strong>"forecastSummary"</strong> forecast parameter: Provides a brief summary of the forecast, mentioning the air pollution level and the validity period of the date. <br>The <strong>"nO2Band", "o3Band", "pM10Band", "pM2.5Band"</strong> and the <strong>"sO2Band"</strong> forecast parameters: Pollution level bands for specific pollutants of air pollution which are Nitrogen Dioxide, Ozone, PM10 Particulates, PM2.5 Particulates, and Sulphur Dioxide. <br>The <strong>"forecastText"</strong> forecast parameter: Contains the information about the forecast that describes the weather conditions and expected pollution levels during a specific period.</p>
+<br> 
+<!-- This paragraph contains the information of data about the air quality forecast in general -->    
+<p style="border: 2px solid black; background-color:white;"><strong><u>The information of the weather forecast</u></strong><br><br>Type of API: {{ data['$type'] }} 
+    <br><br>
+    Update Period: {{ data['updatePeriod'] }} 
+    <br><br>
+    Update Frequency: {{ data['updateFrequency'] }}
+    <br><br>
+    Forecast URL: <a href="{{ data['forecastURL'] }}" title="Click here on this link to visit the forecast URL.">{{ data['forecastURL'] }}</a>
+    <br><br>
+    Disclaimer: {{ data['disclaimerText'] }}</p>
+<!-- This is a paragraph to display the topic about current and future air quality forecasts to determine the weather -->
+<p style="text-align: center; border: 2px solid black; background-color:white;"><strong><u>The result of the current and future weather forecasts</u></strong></p>
+<!-- This opens the unordered list using a for loop to display the information about the current and future air quality forecasts -->
+<div>
+    <ul style="border: 2px solid black; background-color:white;">
+        {% for forecast in data['currentForecast'] %}
+            <li style="border: 2px solid black; background-color:white;">
+                <span title="This is the '$type' parameter for the forecast.">Type of API: {{ forecast['$type'] }}</span>
+                <p>Type of forecast: {{ forecast['forecastType'] }}</p>
+                <p>Forecast Band: {{ forecast['forecastBand'] }}</p>
+                <p>The summary of the forecast: {{ forecast['forecastSummary'] }}</p>
+                <p>Weather forecast description: {{ forecast['forecastText'] | safe }}</p>
+                <p>NO2 Band (Nitrogen dioxide) of this weather forecast: {{ forecast['nO2Band'] }}</p>
+                <p>O3 Band (Ozone) of this weather forecast: {{ forecast['o3Band'] }}</p>
+                <p>PM10 Band (PM10 particulates) of this weather forecast: {{ forecast['pM10Band'] }}</p>
+                <p>PM2.5 Band (PM2.5 particulates) of this weather forecast: {{ forecast['pM25Band'] }}</p>
+                <p>SO2 Band (Sulphur dioxide) of this weather forecast: {{ forecast['sO2Band'] }}</p>
+                {% if 'fromDate' in forecast %}
+                <p>The date and time of this forecast information will start from (written in RFC3339 format): {{ forecast['fromDate'] }}</p>
+                {% endif %}
+                {% if 'toDate' in forecast %}
+                <p>The date and time of this forecast information will end until (written in RFC3339 format): {{ forecast['toDate'] }}</p>
+                {% endif %}
+                {% if 'publishedDate' in forecast %}
+                <p>The date and time this forceast information was published (written in RFC3339 format): {{ forecast['publishedDate'] }}</p>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+<!-- This paragraph contains the information about the air quality index from low to very high addressing the safety and risks that affects the individual's health along with the population positively or negatively -->    
+<p style="border: 2px solid black; background-color:white;"><strong><u>Banding values for air polution about the air quality index</u></strong>
+    <br><br>
+    Low (1-3)<br>
+        At Risk Individuals: Enjoy your usual outdoor activities. <br>General Population: Enjoy your usual outdoor activities.
+        <br><br>
+        Moderate (4-6)<br>
+        At Risk Individuals: Adults and children with lung problems, and adults with heart problems, who experience symptoms, should consider reducing strenuous physical activity, particularly outdoors. <br>General Population: Enjoy your usual outdoor activities.
+        <br><br>
+        High (7-9)<br>
+        At Risk Individuals: Adults and children with lung problems, and adults with heart problems, should reduce strenuous physical exertion, particularly outdoors, and particularly if they experience symptoms. People with asthma may find they need to use their reliever inhaler more often. Older people should also reduce physical exertion. <br>General Population: Anyone experiencing discomfort such as sore eyes, cough or sore throat should consider reducing activity, particularly outdoors.
+        <br><br>
+        Very High (10)<br>
+        At Risk Individuals: Adults and children with lung problems, adults with heart problems, and older people, should avoid strenuous physical activity. People with asthma may find they need to use their reliever inhaler more often. <br>General Population: Reduce physical exertion, particularly outdoors, especially if you experience symptoms such as cough or sore throat.</p>
+       
+{% endblock content %} <!-- This is the closing block that does not allow more content of program codes to be entered in -->

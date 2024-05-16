@@ -1,0 +1,44 @@
+{% extends "layout.html" %} <!-- This extends the layout.html template as parent to another template, which is this template as child -->
+{% block content %} <!-- This is the opening block allowing contents of program codes to be written below -->
+<!-- This is the settings as the style for creating the background image of the website -->
+<style>
+    body{
+        background-image:url('static/wallpaper.jpeg');
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+    }
+</style>
+<!-- This is the header to give the title as a purpose of this website page -->
+<h3 style="border: 2px solid black; background-color:white;">TFL Search API for occurrences of the query string using the site to search.</h3>
+<!-- This is the paragraph providing the information about the occurences of a place to search from with a link to read this API in JSON -->
+<p style="border: 2px solid black; background-color:white;">TFL Search API for the search of queries is written in human-readable format, to read this in machine-readable format as the API click <a href="{{ url_for('searchqueryoccurence_form') }}" title="This is the machine-readable format link to view the parameters for the TFL Search API about the queries.">here</a>. <u>Caution: This website page contains repeated results.</u></p>
+<!-- This is the form created for getting the occurences taking place by entering an actual word or a string of words to search and submitting the button to get the response -->
+<form action="{{ url_for('searchquery_occurence') }}" method="post">
+    <label for="search_query" style="border: 1px solid black; background-color:white;">Enter a search query of a place to read about the news:</label>
+    <input type="text" style="border: 1px solid black;" name="search_query" id="search_query" required>
+    <button style="border:2px solid black; background-color:white;" type="button" title="If you need help to enter the search query on this field, read here.">The values could be any name of a place such as Barnes, Clapham Junction etc. click <a href="{{ url_for('search_match') }}">here</a> for more help with entering a place for your journey.</button>
+    <br><br>
+    <button type="submit">This gets the query of the search site for occurrences. Press this submit button here to get your result after you have completed the form.</button>
+</form>
+<!-- This opens the unordered list using for loops to display list of the occurences that are happening after entering the words to search from the form -->
+<div>
+    <ul style="border: 2px solid black; background-color:white;">
+        {% for search in data %}
+            <li style="border: 2px solid black; background-color:white;">
+                <span>Type of API: {{ data["$type"] }}</span>
+                <p><strong>Query entered: {{ data["query"] }}</strong></p>
+                <ul>
+                    {% for match in data["matches"] %}
+                        <li>
+                            <p><u>Name of the match from the query entered: {{ match["name"] }}</u></p>
+                            <p>Occurences of this match: {{ match["highlights"] | safe }}</p>
+                            <p>URL of match: <a href="{{ match['url'] }}">{{ match["url"] }}</a></p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock content %} <!-- This is the closing block that does not allow more content of program codes to be entered above-->

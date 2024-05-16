@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<style>
+    body{
+        background-image:url('static/wallpaper.jpeg');
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+    }
+</style>
+
+<h3 style="border: 2px solid black; background-color:white;">TFL Stop Point API for the arrival of transports at stations.</h3>
+
+<p style="border: 2px solid black; background-color:white;">This information about the TFL Stop Point API is written in human-readable format, to read the information about the station arrivals using the naptan code from TFL in machine-readable format as the API, click <a href="{{ url_for('stoppointids_form') }}" title="This is the machine-readable format link to view the parameters for the TFL Stop Point API about the arrival of transports (using its ID).">here</a>.</p>
+
+<form action="{{ url_for('stoppoint_ids') }}" method="post">
+    <label for="stoppoint_id" style="border: 1px solid black; background-color:white;">Enter a Stop Point Id:</label>
+    <input type="text" name="stoppoint_id" id="stoppoint_id" required>
+    <button style="border:2px solid black; background-color:white;" type="button" title="If you need help to enter a Stop Point Id on this field, read here. Please enter the values in the english language.">Click <a href="{{ url_for('search_match') }}">here</a> to view a list of Stop point Id to choose from by entering its common names. The examples are 940GZZLUBXN.</button>
+    <br><br>
+    <button type="submit">This gets the list of arrival predictions for the given stop point id. Press this submit button here to get your result after you have completed this form.</button>
+</form>
+<div>    
+    <ul style="border: 2px solid black; background-color:white;">
+        {% for StopPoints in data %}
+            <li style="border: 2px solid black; background-color:white;">
+                <span>Type of API: {{ StopPoints["$type"] }}</span>
+                <p>Naptan Id (This can be also used as a Stop Point Id): {{ StopPoints["naptanId"] }}</p>
+                <p>Name of line: {{ StopPoints["lineName"] }}</p>
+                <p>Name of transport mode: {{ StopPoints["modeName"] }}</p>
+                <p>Live time of station: {{ StopPoints["timeToLive"] }}</p>
+                <p>Current transport location: {{ StopPoints["currentLocation"] }}</p>
+                <p>This transport location is towards: {{ StopPoints["towards"] }}</p>
+                {% set seconds = StopPoints["timeToStation"] %}
+                {% set minutes = seconds //60 %}
+                {% if minutes == 0 %}
+                <p><strong>Station time of arrival: Due</strong></p>
+                {% else %}
+                <p><strong>Station time of arrival is in: {{ minutes }} minutes</strong></p>
+                {% endif %}
+                <p>Expected arrival of vehicle to station: {{ StopPoints["expectedArrival"] }}</p>
+                <p>Vehicle Id: {{ StopPoints["vehicleId"] }}</p>
+                <p>Name of start station: {{ StopPoints["stationName"] }}</p>
+                <p>Name of platform: {{ StopPoints["platformName"] }}</p>
+                <p>Name of station destination: {{ StopPoints["destinationName"] }}</p>
+                {% if "direction" in StopPoints %}
+                <p>Direction: {{ StopPoints["direction"] }}</p>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock content %}

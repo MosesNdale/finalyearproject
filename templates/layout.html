@@ -1,0 +1,238 @@
+<!-- This is the program language written in HTML, CSS and JavaScript using frontend development for designing the physical appearance of the website -->
+<html> <!-- This is the root of the HTML document -->  
+    <head>
+        <!-- Linking bootstrap CSS file library -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <!-- CSS style with width increase of the navigation bar -->
+        <style>
+            .navbar {
+                width: 145%;
+            }
+        </style>
+        <!-- linking to a custom CSS file -->
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css')}}">
+        <!-- Giving the title of the website -->
+        <title>Personalised transport planner</title>
+    </head>
+    <body>
+     <!-- This is the navigation bar of the website -->    
+     <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="/home">Home</a>
+      </li>
+     <!-- This is the dropdown menu for the registration containing the login and logout items-->   
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Register</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/login">Login</a>
+          <a class="dropdown-item" href="/logout">Logout</a>
+        </div>
+      </li>
+    <!-- This is the dropdown menu for the accident stats from the year containing its item -->    
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Accident Stats</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/accidentstats">Accident Stats (From year)</a>
+        </div>
+      </li>
+    <!-- This is the dropdown menu for the forecast containing the air quality guide with explanation, weather report and maps items -->    
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Forecast</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/airqualityguide">Forecast (Air quality guide)</a>
+          <a class="dropdown-item" href="/airqualityelements">Forecast (Explanation of the air pollutants)</a>  
+          <a class="dropdown-item" href="/weatherforecasting">Forecast (Weather report to measure the air quality)</a>
+          <a class="dropdown-item" href="/maps">Forecast (Climate maps)</a>
+        </div>
+      </li>
+   <!-- This is the dropdown menu for the lifts containing the lifts containing the items in two versions -->      
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Lifts</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/liftdisruption">Lifts (Disruption as the original version)</a>
+          <a class="dropdown-item" href="/liftdisruptionv2.0">Lifts (Disruption as version 2.0)</a>
+        </div>
+      </li>
+  <!-- This is the dropdown menu for the crowding containing the real-time, its stop point and the weekday with weekends items -->      
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Crowding</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/livecrowding">Crowding (Live)</a>
+          <a class="dropdown-item" href="/crowdingnaptaninformation">Crowding (Naptan)</a>
+          <a class="dropdown-item" href="/daysofweekcrowdinginformation">Crowding (DayOfWeek)</a>
+        </div>
+      </li>
+  <!-- This is the dropdown menu for the bike point containing all of its locations and its names items -->       
+     <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Bikepoint</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/bikepointlocations">Bikepoint (All locations)</a>
+          <a class="dropdown-item" href="/bikepointnames">Bikepoint (Name of bikepoint)</a>
+        </div>
+      </li>
+  <!-- This is the dropdown menu for the occupancy containing the items for the bike point and charge connectors -->  
+     <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Occupancy</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/bikesoccupancy">Occupancy (Bikes)</a>
+          <a class="dropdown-item" href="/occupancycharges">Occupancy (List of all charge connectors)</a>
+          <a class="dropdown-item" href="/occupancychargeid">Occupancy (Specific charge connectors using its Id)</a>
+        </div>
+      </li>
+  <!-- This is the dropdown menu for the places containing its category, types with selection, names and geographical areas items -->      
+     <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Places</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/placeproperty">Places (Property categories and Keys)</a>
+          <a class="dropdown-item" href="/placetypes">Places (Types of place)</a>
+          <a class="dropdown-item" href="/placetypesgiven">Places (Selected types of place)</a>
+          <a class="dropdown-item" href="/placesearch">Places (Search of name)</a>
+          <a class="dropdown-item" href="/placetypeslongitudeandlatitude">Places (Latitude and Longitude)</a>
+        </div>
+      </li>
+  <!-- This is the dropdown menu dor the road containing its display names, category, disruptions, Id and severity codes items -->   
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Road</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/roadtfl">Road (Managed by TFL)</a>
+          <a class="dropdown-item" href="/roadcategories">Road (Category)</a>
+          <a class="dropdown-item" href="/roadseverities">Road (Severity codes)</a>
+          <a class="dropdown-item" href="/roadforspecificidsearch">Road (Road ID search)</a>  
+          <a class="dropdown-item" href="/roadidfinder">Road (Disruptions using the Road ID)</a>
+          <a class="dropdown-item" href="/roaddisruptionidfinder">Road (Road disruptions ID search)</a>
+          <a class="dropdown-item" href="/roadstreetdisruptions">Road (Date and time of street disruptions)</a>
+        </div>
+      </li>
+  <!-- This is the dropdown menu for the vehicle containing its Id for predicting the arrivals of the transport item -->  
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Vehicle</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/vehicleids">Vehicle (For predicting transport arrivals using its ID)</a>
+        </div>
+      </li>
+  <!-- This is the dropdown menu for the line containing the category, Id, service, disruptions, status, routes and arrivals items -->     
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Line</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/linecategories">Line (Category)</a>
+          <a class="dropdown-item" href="/lineids">Line (Id search)</a>
+          <a class="dropdown-item" href="/lineservicetype">Line (Types of service)</a>
+          <a class="dropdown-item" href="/lineseverity">Line (Severity status level)</a>  
+          <a class="dropdown-item" href="/linemode">Line (Available modes served)</a>
+          <a class="dropdown-item" href="/linearrival">Line (All list of predicted arrivals of a transport)</a>
+          <a class="dropdown-item" href="/linespecificarrival">Line (Specific list of predicted arrivals of a transport)</a>  
+          <a class="dropdown-item" href="/linestatusdetailinformation">Line (Status of line in detail)</a>
+          <a class="dropdown-item" href="/linedisruptions">Line (Disruption lines)</a>
+          <a class="dropdown-item" href="/linedisruptionmodes">Line (Disruption modes)</a>
+          <a class="dropdown-item" href="/lineseveritystatus">Line (Valid severity status level)</a>
+          <a class="dropdown-item" href="/lineroutes">Line (Routes and service types for origination and destination stations)</a>
+        </div>
+      </li>
+   <!-- This is the dropdown menu for the mode containing the list, transport arrivals and types of service items -->     
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Mode</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/modelist">Line (List of modes)</a>
+          <a class="dropdown-item" href="/modearrivals">Mode (Predicted arrivals of transport modes)</a>
+          <a class="dropdown-item" href="/modeservicetype">Mode (Active service types)</a>
+        </div>
+      </li>
+  <!-- This is the dropdown menu for the stop point containing the category, transport list, timetable, types and arrivals item -->      
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Stop Point</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/stoppointcategory">Stop Point (Category)</a>
+          <a class="dropdown-item" href="/stoppointmodes">Stop Point (List of modes)</a>
+          <a class="dropdown-item" href="/stoppointmodedisruptions">Stop Point (Disruption of mode)</a>
+          <a class="dropdown-item" href="/stoppointtypeservice">Stop Point (Types of service using its Id)</a>  
+          <a class="dropdown-item" href="/stoppointidarrivals">Stop Point (Arrivals using its Id)</a>  
+          <a class="dropdown-item" href="/stoppointtype">Stop Point (All types of stop point)</a>
+          <a class="dropdown-item" href="/stoppointtypes">Stop Point (Specific type of stop point)</a>
+          <a class="dropdown-item" href="/stoppointroute">Stop Point (All sections of timetable routes using its Id)</a>
+        </div>
+      </li>
+  <!-- This is the dropdown menu for journey containing the list of transports available and two versions of the planner items -->      
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Journey</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/journeylistmodes">Journey (List of modes)</a>
+          <a class="dropdown-item" href="/journeybasicplan">Journey (Basic planner)</a>
+          <a class="dropdown-item" href="/journeyadvancedplan">Journey (Advanced planner)</a>
+        </div>
+      </li>
+  <!-- This is the dropdown menu for search containing the providers, sorting options,stations lookup,categories, occurences items -->      
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Search</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/searchmatch">Stop Point (Search to enter query containing name etc for searching stations.)</a>
+          <a class="dropdown-item" href="/searchcategories">Search (Category)</a>
+          <a class="dropdown-item" href="/searchsorting">Search (Sorting options)</a>
+          <a class="dropdown-item" href="/searchproviders">Search (Names of a search provider)</a>
+          <a class="dropdown-item" href="/searchqueryoccurence">Search (Occurence using search query)</a>
+        </div>
+      </li>
+  <!-- This is the dropdown menu for the station data containing two files stored zip folders items -->       
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Station Data</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/tflstationdata">Station Data (Stored in zip folders)</a>
+        </div>
+      </li>
+ <!-- This is the dropdown menu for the plan/news containing the project proposal, plan and news of climate change congestion items-->       
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Plan and news</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/planandnews">Plan and news (About climate change and congestion)</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+    <div class="container-fluid">
+        {% block content %}
+         
+        {% endblock %}
+    </div>
+  <!-- This is the scripts for the jquery, popper and bootstrap javascript files -->       
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    </body>
+  <!-- This is the scipt for the preparation of google translate, the website is in english language but other languages are available -->  
+    <head>
+        <script type="text/javascript">
+            function googleTranslateElementInit() {
+                new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'af,sq,am,ar,hy,as,ay,az,bm,eu,be,bn,bho,bs,bg,ca,ceb,ny,zh-CN,zh-TW,co,hr,cs,da,dv,doi,nl,eo,et,ee,tl,fi,fr,fy,gl,ka,de,el,gn,gu,ht,ha,haw,iw,hi,hmn,hu,is,ig,ilo,id,ga,it,ja,jw,kn,kk,km,rw,gom,ko,kri,ku,ckb,ky,lo,la,lv,ln,lt,lg,lb,mk,mai,mg,ms,ml,mt,mi,mr,mni-Mtei,lus,mn,my,ne,no,or,om,ps,fa,pl,pt,pa,qu,ro,ru,sm,sa,gd,nso,sr,st,sn,sd,si,sk,sl,so,es,su,sw,sv,tg,ta,tt,te,th,ti,ts,tr,tk,ak,uk,ur,ug,uz,vi,cy,xh,yi,yo,zu', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate');
+            }
+        </script>
+        <!-- This is the script for the google translate -->
+        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+        <!-- This is the CSS style to customise the widget of google translate -->
+        <style>
+            #google_translate {
+                border: 1px solid black;
+                background-color: white;
+            }
+        </style>
+    </head>
+<body>
+    <!-- This is the widget of google translate for selecting the languages that are available -->
+    <ul>
+        <li>
+            <div id="google_translate">
+                <div class="skiptranslate goog-te-gadget" dir="ltr" style="">
+                    <div id=":0.targetLanguage" style="display: inline;">
+                        <select class="goog-te-combo" aria-label="Select Language"></select>
+                    </div>
+                    &nbsp;&nbsp;<strong>English is the default language, Made using</strong>
+                    <span style="white-space:nowrap">
+                        <a class="VIpgJd-ZVi9od-l4eHX-hSRGPd" href="https://translate.google.com" target="_blank">Google Translate</a>
+                    </span>
+                </div>
+            </div>
+        </li>
+    </ul>
+</body>
+</html>

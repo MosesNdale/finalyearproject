@@ -1,0 +1,34 @@
+{% extends "layout.html" %} <!-- This extends the layout.html template as parent to another template, which is this template as child -->
+{% block content %} <!-- This is the opening block allowing contents of program codes to be written below -->
+<!-- This is the settings as the style for creating the background image of the website -->
+<style>
+    body{
+        background-image:url('static/wallpaper.jpeg');
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+    }
+</style>
+<!-- This is the header to give the title as a purpose of this website page -->
+<h3 style="border: 2px solid black; background-color:white;">Sign in to this personalised transport planner by entering your username and password.</h3>
+<!-- This is the form created for getting login details by entering the username with a password and submitting the button to get the response --> 
+<form action="/submit" method="post">
+    <label for="nm" style="border: 1px solid black; background-color:white;">Enter a username:</label>
+    <input type="text" name="nm" value="{{ username }}" required/>
+    <br><br>
+    <label for="pswd" style="border: 1px solid black; background-color:white;">Enter a password:</label>
+    <input type="password" name="pswd" value="{{ password }}" required/>
+    <br><br>
+    <input type="submit" value="submit"/>
+    <button style="border:2px solid black; background-color:white;" type="button">Press the submit button after you have entered your username and password on this form to register.</button>
+</form>
+<!-- This shows the result of the username and password the user has entered on the fields to sign in to the personalised transport planner from the login page -->
+<div>
+    <p style="border: 2px solid black; background-color:white;">The login will be successful by the post method, when your username and password will appear here below:<br>
+        Hello, your username is {{ username }}.<br> <!-- This is the output of the user's username -->
+        Hello, your password is {{ password }}.<br> <!-- This is the output of the user's password -->
+        If you want to log out now or after you have signed in to this personalised transport planner, click <a href="{{ url_for('logout') }}" title="You will be logged out when you click this link here.">here</a>. <!-- The option to log out once signed in or to return back -->
+    </p>
+</div>
+ 
+{% endblock content %} <!-- This is the closing block that does not allow more content of program codes to be entered above-->

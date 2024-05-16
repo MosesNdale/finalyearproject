@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<style>
+    body{
+        background-image:url('static/wallpaper.jpeg');
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+    }
+</style>
+
+<h3 style="border: 2px solid black; background-color:white;">TFL Stop Point API for the arrival of transports at stations in machine-readable format.</h3>
+
+<form action="{{ url_for('stoppointid_info') }}" method="post">
+    <label for="stoppoint_ids" style="border: 1px solid black; background-color:white;">Enter an Id of a Stop Point:</label>
+    <input type="text" name="stoppoint_ids" id="stoppoint_ids" required>
+    <button style="border:2px solid black; background-color:white;" type="button" title="If you need help to enter a Stop Point Id on this field, read here. Please enter the values in the english language.">Click <a href="{{ url_for('search_match') }}">here</a> to view a list of Stop point Id to choose from by entering its common names. The examples are 940GZZLUBXN.</button>
+    <br><br>
+    <button type="submit">This gets the list of arrival predictions for the given stop point id. Press this submit button here to get your result after you have completed this form.</button>
+</form>
+{% endblock content %}
