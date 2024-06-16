@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<style>
+    body{
+        background-image:url('static/wallpaper.jpeg');
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+    }
+</style>
+
+<h3 style="border: 2px solid black; background-color:white;">TFL Stop Point API to find different kind of transports as modes.</h3>
+
+<p style="border: 2px solid black; background-color:white;">This information about the TFL Stop Point API is written in human-readable format, to read the information about the types of transports from TFL in machine-readable format as the API, click <a href="{{ url_for('stoppointmode_info') }}" title="This is the machine-readable format link to view the parameters for the TFL Stop Point API about the transports modes">here</a>.</p>
+
+<div>
+    <ul style="border: 2px solid black; background-color:white;">
+        {% for stoppointmodes in data %}
+            <li style="border: 2px solid black; background-color:white;">
+                <span>Type of API: {{ stoppointmodes["$type"] }}</span>
+                <p>Name of transport mode: {{ stoppointmodes["modeName"] }}</p>
+                <p>TFL service: {{ stoppointmodes["isTflService"] }}</p>
+                <p>Payment of fares: {{ stoppointmodes["isFarePaying"] }}</p>
+                <p>Scheduled service: {{ stoppointmodes["isScheduledService"] }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock content %}

@@ -1,0 +1,22 @@
+{% extends "layout.html" %} <!-- This extends the layout.html template as parent to another template, which is this template as child -->
+{% block content %} <!-- This is the opening block allowing contents of program codes to be written below -->
+<!-- This is the settings as the style for creating the background image of the website -->
+<style>
+    body{
+        background-image:url('static/wallpaper.jpeg');
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+    }
+</style>
+<!-- This is the header to give the title as a purpose of this website page -->
+<h3 style="border: 2px solid black; background-color:white;">TFL Line API for a valid list of severity codes in machine-format as JSON.</h3>
+<!-- This is the form created for all lines by entering a severity number and submitting the button to get the response -->
+<form action="{{ url_for('lineseveritystatus_info') }}" method="post">
+    <label for="severity_number" style="border: 1px solid black; background-color:white;">Enter a severity level number of a line:</label>
+    <input type="text" name="severity_number" id="severity_number" required>
+    <button style="border:2px solid black; background-color:white;" type="button" title="If you need help to enter a severity number, read here">Any severity number from 0-20, or click <a href="{{ url_for('lineseverity') }}">here</a> to view the severity numbers of transports.</button>
+    <br><br>
+    <button type="submit">This gets the line status for all lines with a given severity. Press this submit button here to get your result after you have completed this form.</button>
+</form>
+{% endblock content %} <!-- This is the closing block that does not allow more content of program codes to be entered above-->

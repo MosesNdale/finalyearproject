@@ -1,0 +1,30 @@
+{% extends "layout.html" %} <!-- This extends the layout.html template as parent to another template, which is this template as child -->
+{% block content %} <!-- This is the opening block allowing contents of program codes to be written below -->
+<!-- This is the settings as the style for creating the background image of the website -->
+<style>
+    body{
+        background-image:url('static/wallpaper.jpeg');
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+    }
+</style>
+<!-- This is the header to give the title as a purpose of this website page -->
+<h3 style="border: 2px solid black; background-color:white;">TFL Line API to find different kind of transports as modes.</h3>
+<!-- This is the paragraph provididng the information about all transport modes available with a link to read this API in JSON -->
+<p style="border: 2px solid black; background-color:white;">This information about the TFL Line API is written in human-readable format, to read the information about the types of transports from TFL in machine-readable format as the API, click <a href="{{ url_for('modelist_info') }}" title="This is the machine-readable format link to view the parameters for the TFL Line API about the transports modes">here</a>.</p>
+<!-- This opens the unordered list using for loops to display list of fares and services in each transport from the mode -->
+<div>
+    <ul style="border: 2px solid black; background-color:white;">
+        {% for listofmodes in data %}
+            <li style="border: 2px solid black; background-color:white;">
+                <span>Type of API: {{ listofmodes["$type"] }}</span>
+                <p>Name of transport mode: {{ listofmodes["modeName"] }}</p>
+                <p>TFL service: {{ listofmodes["isTflService"] }}</p>
+                <p>Payment of fares: {{ listofmodes["isFarePaying"] }}</p>
+                <p>Scheduled service: {{ listofmodes["isScheduledService"] }}</p>
+            </li>
+        {% endfor %}
+    </ul> <!-- This closes the unordered list about the valid transport modes -->
+</div>
+{% endblock content %} <!-- This is the closing block that does not allow more content of program codes to be entered above-->

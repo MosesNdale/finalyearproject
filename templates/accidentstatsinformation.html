@@ -1,0 +1,22 @@
+{% extends "layout.html" %} <!-- This extends the layout.html template as parent to another template, which is this template as child-->
+{% block content %} <!-- This is the opening block allowing contents of program codes to be written in -->
+<!-- This is the settings as the style for creating the background image of the website -->
+<style>
+    body{
+        background-image:url('static/wallpaper.jpeg');
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+    }
+</style>
+<!-- This is the header to give the title as a purpose of this website page -->
+<h3 style="border: 2px solid black; background-color:white;">TFL API for accident stats in machine-readable format as JSON.</h3>
+<!-- This is the form created for getting accident details by entering the year and submitting the button to get the response -->
+<form action="{{ url_for('accident_info') }}" method="post">
+    <label for="year" style="border: 1px solid black; background-color:white;">Enter a year to display the details of the accidents:</label>
+    <input type="text" style="border: 1px solid black;" name="year" id="year" required>
+    <button style="border:2px solid black; background-color:white;" type="button" title="If you need help to enter the year of accident stats on this field, read here.">The year to filter the accidents statistics should be entered in int32 or yyyy format, for example 2019.</button>
+    <br><br>
+    <button type="submit">This gets all accident details for accidents occuring in the specified year. Press this submit button here to get your result after you have completed this form.</button>
+</form>
+{% endblock content %} <!-- This is the closing block that does not allow more content of program codes to be entered in -->
