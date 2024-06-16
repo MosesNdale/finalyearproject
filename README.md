@@ -3,4 +3,4 @@ This is my website I have made which was about the personalised transport planne
 
 Watch my tutorial of the personalised planner on YouTube here: https://youtu.be/eCd9v3HVS64
 
-Navigate the Releases section from GitHub to download the source codes.
+Navigate to the Releases section from GitHub to download the source codes.
