@@ -1,0 +1,89 @@
+{% extends "layout.html" %} <!-- This extends the layout.html template as parent to another template, which is this template as child -->
+{% block content %} <!-- This is the opening block allowing contents of program codes to be written below -->
+<!-- This is the settings as the style for creating the background image of the website -->
+<style>
+    body {
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .light-mode {
+        background-image:url('static/wallpaper.jpeg');
+        --bg-color: white;
+        --text-color: black;
+    }
+    .dark-mode {
+        background-image:url('static/darkmode-wallpaper.jpg');
+        --bg-color: #5F5F5F;
+        --text-color: white;
+    }
+    .content-box {
+        border: 2px solid var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .toggle-button {
+        cursor: pointer;
+        display: block;
+        margin: auto;
+    }
+</style>
+<!-- This is the button that is used to enable light or dark mode of the personalised transport planner -->
+<button class="toggle-button" onclick="toggleMode()">Click this button here to change towards light or dark mode with the style of text</button>
+
+<!-- This is the header to give the title as a purpose of this website page -->
+<h3 class="content-box">TFL Stop Point API for the search of stations.</h3>
+<!-- This is the paragraph providing information about serching for a stop point from TFL with a link to read this API in JSON -->
+<p class="content-box">This TFL Stop Point API for the search of stations as queries is written in human-readable format, to read this in machine-readable format as the API, click <a href="{{ url_for('searchmatch_form') }}" title="This is the machine-readable format link to view the parameters for the TFL Stop Point API about the queries.">here</a>. <u>Caution: This website page contains repeated results.</u></p>
+<!-- This is the form created for getting the stoppoints of stations by entering an actual word or a string of words to search and submitting the button to get the response -->
+<form action="{{ url_for('search_match') }}" method="post">
+    <label for="Search_Query" class="content-box">Enter a common name of a place as a query to search for a station:</label>
+    <input type="text" name="Search_Query" id="Search_Query" required>
+    <button type="button" title="If you need help to enter the search query on this field, read here.">The values could be any name of a place such as Barnes, Clapham Junction, Puntey etc.</button>
+    <br><br>
+    <button type="submit">This gets the search results of a query entered. Press this submit button here to get your result after you have completed this form.</button>
+</form>
+<!-- This opens the unordered list using for loops to display list of stations after entering the words in the field of the form -->
+<div>
+    <ul class="content-box">
+        {% for searching in data %}
+            <li class="content-box">
+                <span>Type of API: {{ data["$type"] }}</span>
+                <p>Query entered: {{ data["query"] }}</p>
+                <p><strong>Total matches found: {{ data["total"] }}</strong></p>
+                <ul>
+                    {% for match in data["matches"] %}
+                        <li>
+                            <p><u>Type of match: {{ match["$type"] }}</u></p>
+                            <p>Name of station: {{ match["name"] }}</p>
+                            {% if "zone" in match %}
+                            <p>Fare zone: {{ match["zone"] }}</p>
+                            {% endif %}
+                            <p>Naptan Id (can be also used as the Stop point Id): {{ match["id"] }}</p>
+                            <p>Ics code: {{ match["icsId"] }}</p>
+                            <p>Name of transport modes that supports this station: {{ match["modes"] }}</p>
+                            <p>Id of top most parent: {{ match["topMostParentId"] }}</p>
+                            <p>Latitude: {{ match["lat"] }}</p>
+                            <p>Longitude: {{ match["lon"] }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul> <!-- This closes the unordered list about the search of stations using words to enter, showing the outcome of stations -->
+</div>
+
+<script>
+    function toggleMode() {
+        document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode');
+    }
+    
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.add('light-mode');
+    }
+</script>
+{% endblock content %} <!-- This is the closing block that does not allow more content of program codes to be entered above-->

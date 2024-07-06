@@ -1,0 +1,76 @@
+{% extends "layout.html" %} <!-- This extends the layout.html template as parent to another template, which is this template as child-->
+{% block content %} <!-- This is the opening block allowing contents of program codes to be written in below -->
+<!-- This is the settings as the style for creating the background image of the website -->
+<style>
+    body {
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .light-mode {
+        background-image:url('static/wallpaper.jpeg');
+        --bg-color: white;
+        --text-color: black;
+    }
+    .dark-mode {
+        background-image:url('static/darkmode-wallpaper.jpg');
+        --bg-color: #5F5F5F;
+        --text-color: white;
+    }
+    .content-box {
+        border: 2px solid var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .toggle-button {
+        cursor: pointer;
+        display: block;
+        margin: auto;
+    }
+</style>
+<!-- This is the button that is used to enable light or dark mode of the personalised transport planner -->
+<button class="toggle-button" onclick="toggleMode()">Click this button here to change towards light or dark mode with the style of text</button>
+
+<!-- This is the header to give the title as a purpose of this website page -->
+<h3 class="content-box">TFL Journey API for the advanced planning of your journey from the origin to the destination in machine-readable format as JSON.</h3>
+<!-- This is the paragraph provididng the information about the advanced journey planner in JSON -->
+<p class="content-box">Click <a href="{{ url_for('search_match') }}">here</a> for more help with entering a place for your journey or use the maps from TFL to help find a nearby station, stop points, piers and places of interest for your origin and destination of your journey found <a href="https://tfl.gov.uk/maps">here</a>.</p>
+<!-- This is the form created for getting the plan of a journey by entering its origin and destination along with the travel through point and the  type of travel of the journey by submitting the button to get the response -->
+<form action="{{ url_for('journeyadvancedplan_info') }}" method="post">
+    <label for="startofjourneys" class="content-box">Enter an origin of the journey:</label>
+    <input type="text" name="startofjourneys" id="startofjourneys" required>
+    <button type="button" title="If you need help to enter an origin of your journey on this field, read here. In terms of an origin of your journey, the value entered on the form will cause disambiguation unless it exactly matches a point of interest name.">This can be WGS84 coordinates expressed as "latitude,longitude", a UK postcode, a Naptan (StopPoint) id, an ICS code, or a free-text string.</button>
+    <br><br>
+    <label for="endofjourneys" class="content-box">Enter the destination of the journey:</label>
+    <input type="text" name="endofjourneys" id="endofjourneys" required>
+    <button type="button" title="If you need help to enter a destination of your journey on this field, read here. In terms of a destination of your journey, the value entered on the form will cause disambiguation unless it exactly matches a point of interest name.">This can be WGS84 coordinates expressed as "latitude,longitude", a UK postcode, a Naptan (StopPoint) id, an ICS code, or a free-text string.</button>
+    <br><br>
+    <label for="viajourneys" class="content-box">Enter the via point of the journey:</label>
+    <input type="text" name="viajourneys" id="viajourneys" required>
+    <button type="button" title="If you need help to enter a travel through point as the via point of your journey on this field, read here. In terms of a via point of your journey, the value entered on the form will cause disambiguation unless it exactly matches a point of interest name.">This can be WGS84 coordinates expressed as "latitude,longitude", a UK postcode, a Naptan (StopPoint) id, an ICS code, or a free-text string.</button>
+    <br><br>
+    <label for="timeofjourneys" class="content-box">Enter the type of travel for your journey:</label>
+    <input type="text" name="timeofjourneys" id="timeofjourneys" required>
+    <button type="button" title="If you need help to enter the type of travel for your journey on this field, read here.">The values to be entered on this form are only Departing or Arriving, which is supported by the type of travel for your journey.</button>
+    <br><br>
+    <label for="transport_mode" class="content-box">Enter a mode of transport for your journey:</label>
+    <input type="text" name="transport_mode" id="transport_mode" required>
+    <button type="button" title="If you need help to enter a transport of travel for your journey on this field, read here.">Click <a href="{{ url_for('journeymodelist') }}">here</a> to view a type of transport to choose from for travelling during your journey.</button>
+    <br><br>
+    <button type="submit">This performs a journey planner search from the parameters specified in simple types. Press this submit button here to get your result after you have completed your form.</button>
+</form>
+
+<script>
+    function toggleMode() {
+        document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode');
+    }
+    
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.add('light-mode');
+    }
+</script>
+{% endblock content %} <!-- This is the closing block that does not allow more content of program codes to be entered in above -->

@@ -1,0 +1,64 @@
+{% extends "layout.html" %} <!-- This extends the layout.html template as parent to another template, which is this template as child-->
+{% block content %} <!-- This is the opening block allowing contents of program codes to be written below -->
+<!-- This is the settings as the style for creating the background image of the website -->
+<style>
+    body {
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .light-mode {
+        background-image:url('static/wallpaper.jpeg');
+        --bg-color: white;
+        --text-color: black;
+    }
+    .dark-mode {
+        background-image:url('static/darkmode-wallpaper.jpg');
+        --bg-color: #5F5F5F;
+        --text-color: white;
+    }
+    .content-box {
+        border: 2px solid var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .toggle-button {
+        cursor: pointer;
+        display: block;
+        margin: auto;
+    }
+</style>
+
+<button class="toggle-button" onclick="toggleMode()">Click this button here to change towards light or dark mode with the style of text</button>
+
+<!-- This is the header to give the title as a purpose of this website page -->
+<h3 class="content-box">TFL API crowding (For days of the week)</h3>
+<!-- This is the paragraph provididng the information about crowding during all days of the week -->
+<p style="text-align: center" class="content-box">This information about the API crowding happening weekly from TFL is written in machine-readable format only.</p>
+<!-- This is the form created for getting the crowding information in stations by entering the naptan code with a day of the week and submitting the button to get the response -->
+<form action="{{ url_for('daysofweek_crowding') }}" method="post">
+    <label for="Naptan" class="content-box">Enter a Naptan code:</label>
+    <input type="text" style="border: 1px solid black;" name="Naptan" id="Naptan" required>
+    <button type="button" title="If you need help to enter a naptan code on this field, read here. Please enter in the english language.">Click <a href="{{ url_for('search_match') }}">here</a> to view the naptan code/Id to choose from.</button>
+    <br><br>
+    <label for="DayOfWeek" class="content-box">Enter an abbreviation for the day of the week:</label>
+    <input type="text" style="border: 1px solid black;" name="DayOfWeek" id="DayOfWeek" required>
+    <button type="button" title="If you need help to enter an abbreviation for the day of the week, read here. Please enter in the english language.">The values are MON, TUE, WED, THURS, FRI, SAT and SUN for the days of the week as abbreviation.</button>
+    <br><br>
+    <button type="submit">This gets the specific day of the Week crowding information. Press this submit button here to get your result after you have completed this form.</button>
+</form>
+
+<script>
+    function toggleMode() {
+        document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode');
+    }
+    
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.add('light-mode');
+    }
+</script>
+{% endblock content %} <!-- This is the closing block that does not allow more content of program codes to be entered above -->

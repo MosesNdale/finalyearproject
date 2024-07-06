@@ -1,0 +1,66 @@
+{% extends "layout.html" %} <!-- This extends the layout.html template as parent to another template, which is this template as child -->
+{% block content %} <!-- This is the opening block allowing contents of program codes to be written below -->
+<!-- This is the settings as the style for creating the background image of the website -->
+<style>
+    body {
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .light-mode {
+        background-image:url('static/wallpaper.jpeg');
+        --bg-color: white;
+        --text-color: black;
+    }
+    .dark-mode {
+        background-image:url('static/darkmode-wallpaper.jpg');
+        --bg-color: #5F5F5F;
+        --text-color: white;
+    }
+    .content-box {
+        border: 2px solid var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .toggle-button {
+        cursor: pointer;
+        display: block;
+        margin: auto;
+    }
+</style>
+
+<button class="toggle-button" onclick="toggleMode()">Click this button here to change towards light or dark mode with the style of text</button>
+
+<!-- This is the header to give the title as a purpose of this website page -->
+<h3 class="content-box">TFL Place API by getting the type of place with its latitude and longitude in machine-format as JSON.</h3>
+<!-- This is the form created for getting the geographical area for a type of place by entering its type with its latitude and longitude and submitting the button to get the response -->
+<form action="{{ url_for('placelonlat_info') }}" method="post">
+    <label for="place_types" class="content-box">Enter a type of the place:</label>
+    <input type="text" name="place_types" id="place_types" required>
+    <button type="button" title="If you need help to enter a type of place, read here">Click <a href="{{ url_for('types_places') }}">here</a> to get a type of place that is available.</button>
+    <br><br>
+    <label for="latitude" class="content-box">Enter a latitude of the place:</label>
+    <input type="text" name="latitude" id="latitude" required>
+    <button type="button" title="If you need help to enter the latitude of the place, read here. (This includes the longitude of the place too.)">Click <a href="{{ url_for('selected_placetype') }}">here</a> to get a chosen type of place for receiving the latitude of the place that is available.</button>
+    <br><br>
+    <label for="longitude" class="content-box">Enter a longitude of the place:</label>
+    <input type="text" name="longitude" id="longitude" required>
+    <button type="button" title="If you need help to enter the longitude of the place, read here. (This includes the latitude of the place too.)">Click <a href="{{ url_for('selected_placetype') }}">here</a> to get a chosen type of place for receiving the longitude of the place that is available.</button>
+    <br><br>
+    <button type="submit">This gets any places of the given type whose geography intersects the given latitude and longitude. Press this submit button here to get your result after you have completed this form.</button>
+</form>
+
+<script>
+    function toggleMode() {
+        document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode');
+    }
+    
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.add('light-mode');
+    }
+</script>
+{% endblock content %} <!-- This is the closing block that does not allow more content of program codes to be entered above-->

@@ -1,0 +1,63 @@
+{% extends "layout.html" %} <!-- This extends the layout.html template as parent to another template, which is this template as child-->
+{% block content %} <!-- This is the opening block allowing contents of program codes to be written in -->
+<!-- This is the settings as the style for creating the background image of the website -->
+<style>
+    body {
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .light-mode {
+        background-image:url('static/wallpaper.jpeg');
+        --bg-color: white;
+        --text-color: black;
+    }
+    .dark-mode {
+        background-image:url('static/darkmode-wallpaper.jpg');
+        --bg-color: #5F5F5F;
+        --text-color: white;
+    }
+    .content-box {
+        border: 2px solid var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .toggle-button {
+        cursor: pointer;
+        display: block;
+        margin: auto;
+    }
+</style>
+
+<button class="toggle-button" onclick="toggleMode()">Click this button here to change towards light or dark mode with the style of text</button>
+
+<!-- This is the header to give the title as a purpose of this website page -->        
+<h3 class="content-box">TFL API Crowding (Live)</h3>
+<!-- This is the paragraph provididng information about real-time crowding information at stations with a link to read this API in JSON -->
+<p class="content-box">This information about the API crowding in real time from TFL is written in human-readable format, to read the information about air quality from TFL in machine-readable format as the API, click <a href="{{ url_for('livecrowding_form') }}" title="This is the machine-readable format link to view the parameters for the TFL API crowding in real time.">here</a>.</p>
+<!-- This is the form created for getting crowding information in real-time by entering the naptan Id and submitting the button to get the response -->
+<form action="{{ url_for('live_crowding') }}" method="post">
+    <label for="naptancode" class="content-box">Enter a naptan code:</label>
+    <input type="text" style="border: 1px solid black;" name="naptancode" id="naptancode" required >
+    <button type="button" title="If you need help to enter a naptan code on this field, read here.">Click <a href="{{ url_for('search_match') }}">here</a> to view the naptan code/Id to choose from.</button>
+    <br><br>
+    <button type="submit">This gets the live crowding information in a station. Press this submit button here to get your result after you have completed this form.</button>
+</form>
+<div class="content-box">
+    {{ data }} <!-- This contains all data that was stored in a dictionary containing keys and values from the TFL API website URL -->
+</div>
+
+<script>
+    function toggleMode() {
+        document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode');
+    }
+    
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.add('light-mode');
+    }
+</script>
+{% endblock content %} <!-- This is the closing block that does not allow more content of program codes to be entered in -->

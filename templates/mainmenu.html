@@ -1,0 +1,82 @@
+{% extends "layout.html" %} <!-- This is a child template that provides extension from the base template called layout.html -->
+{% block content %} <!-- The open placeholder tag where the HTML code of this template can be inserted as the content -->
+<!-- This is the settings as the style for creating the background image of the website -->
+<style>
+    body {
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+    }
+    #datetime {
+        color: var(--text-color);
+        background-color: var(--bg-color);
+        text-align: center;
+    }
+    .light-mode {
+        background-image:url('static/main menu.jpg');
+        --bg-color: white;
+        --text-color: black;
+    }
+    .dark-mode {
+        background-image:url('static/main menu-greyscale.jpg');
+        --bg-color: #5F5F5F;
+        --text-color: white;
+    }
+    .content-box {
+        border: 2px solid var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .toggle-button {
+        cursor: pointer;
+        display: block;
+        margin: auto;
+    }
+</style>
+
+<button class="toggle-button" onclick="toggleMode()">Click this button here to change towards light or dark mode with the style of text</button>
+
+<h2 style="text-align:center" class="content-box">This is the main menu of the personalised transport planner</h2>
+
+<p style="text-align:center" class="content-box">Click any buttons on the navigation bar at the top of this website to search or click <a href="{{ url_for('home') }}">here</a> to start.</p>
+
+<p id="datetime" title="This is the current date in day / month / year format and time in 24 hours format." class="content-box"></p>
+
+<!-- This section covers the introduction to my website project, with warning messages and the use of API as my explanation -->
+<p style="text-align: center" class="content-box">This project is about combating climate change and congestion in public transports, the statement of this problem is the use of the REST API from TFL to be leveraged for providing more specific and personalised information for people who live in London, which is the capital city of England or within the United Kingdom. The source of the information from TFL is Powered by TfL Open Data.<br>To read more about TFL click <a href="https://tfl.gov.uk/corporate/about-tfl/">here</a>.</p>
+<p class="content-box"><strong><u>Note: This personalised transport planner website may require internet to use when browsing on your device!</u></strong> <br>About us: This website project about the personalised transport planner was made using python, jupyter notebook, Flask and HTML as web pages within jupyter notebook. You can click on the drop-down navigation buttons to start browsing as this website application runs on the local host. <br><u>Caution: some website pages may contain repeated results after pressing the button to submit your response on the HTML form. Please enter the values in the field of the forms to be completed in the english langauage. If the result returns empty or contains null values from a HTML form, this means that the data contains errors or it is unavailable to be provided. The results from the HTML form is automatically in light mode after entering the valid values on the fields and pressing the submit button, change to dark mode by clicking the button on the top of the website beneath the navigation bar if you prefer to read the information there.</u><br>The Rest API from TFL was mostly used to build this website, to read more about this information click <a href="https://api-portal.tfl.gov.uk/apis">here</a> and some parts of the API from London air was used to be included on this website, to read more about this information click <a href="https://api.erg.ic.ac.uk/AirQuality/help">here</a>. This website was written in human-readable format as plain language for the general public as a stakeholder to understand the text and machine-readable format as the JSON containing the parameters as keys and values from TFL and London Air for the developers or people who would want to understand the code that is written as the API. <br>To read about the frequently asked questions from TFL about the rest API on its website, click <a href="https://api-portal.tfl.gov.uk/faq">here</a>.</p>
+
+<!-- This is the paragraph providing the information about the project proposal and the plan to tackle climate change and congestion with the news for it -->
+<p class="content-box"><strong><u>Plan and news for combating climate change and congestion in the public transports and all over the world</u></strong> <br>To read about my plan of climate change and congestion made by me and including the climate change and congestion plans from TFL, click <a href="static/Battling congestion and climate change for TFL (Plan).docx">here</a> to download the word document. The size of this word document file is approximately 190KB, to have a preview of this file navigate to the "static" folder. <br>To read about the project proposal I have chosen, click <a href="static/Public transport planner web project.docx">here</a> to download the word document. The size of this word document file is approximately 22KB, to have a preview of this file navigate to the "static" folder. <br>To read about the news of climate change that is happening in the uk, click <a href="https://www.bbc.co.uk/news/topics/cmj34zmwm1zt">here</a>. <br>To read about the news of climate change that is happening worldwide, click <a href="https://www.climatechangenews.com/">here</a> or <a href="https://www.theguardian.com/world/extreme-weather">here</a>. <br>To read about the news of congestion that is happening in the uk, click <a href="https://www.standard.co.uk/topic/congestion">here</a>. <br>To read about the news of congestion that is happening worldwide, click <a href="https://phys.org/tags/congestion/">here</a> to view or click <a href="https://phys.org/tags/traffic+congestion/">here</a>.</p>
+
+<script>
+    <!-- create a function to update the date and time -->
+    function updateDateTime() {
+        <!-- create a new `Date` object -->
+        const now = new Date();
+
+        <!-- get the current date and time as a string -->
+        const currentDateTime = now.toLocaleString();
+
+        <!-- update the `textContent` property of the `span` element with the `id` of `datetime` -->
+        document.querySelector('#datetime').textContent = currentDateTime;
+    }
+    <!-- call the `updateDateTime` function every second -->
+    setInterval(updateDateTime, 1000);
+</script>
+
+<script>
+    function toggleMode() {
+        document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode');
+    }
+    
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.add('light-mode');
+    }
+</script>
+
+{% endblock content %} <!-- The closed placeholder tag where the HTML code of this template cannot be inserted as the content from here -->

@@ -1,0 +1,66 @@
+{% extends "layout.html" %} <!-- This extends the layout.html template as parent to another template, which is this template as child -->
+{% block content %} <!-- This is the opening block allowing contents of program codes to be written below -->
+<!-- This is the settings as the style for creating the background image of the website -->
+<style>
+    body {
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .light-mode {
+        background-image:url('static/wallpaper.jpeg');
+        --bg-color: white;
+        --text-color: black;
+    }
+    .dark-mode {
+        background-image:url('static/darkmode-wallpaper.jpg');
+        --bg-color: #5F5F5F;
+        --text-color: white;
+    }
+    .content-box {
+        border: 2px solid var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .toggle-button {
+        cursor: pointer;
+        display: block;
+        margin: auto;
+    }
+</style>
+
+<button class="toggle-button" onclick="toggleMode()">Click this button here to change towards light or dark mode with the style of text</button>
+
+<!-- This is the header to give the title as a purpose of this website page -->
+<h3 class="content-box">TFL Line API to find different kind of transports as modes.</h3>
+<!-- This is the paragraph provididng the information about all transport modes available with a link to read this API in JSON -->
+<p class="content-box">This information about the TFL Line API is written in human-readable format, to read the information about the types of transports from TFL in machine-readable format as the API, click <a href="{{ url_for('modelist_info') }}" title="This is the machine-readable format link to view the parameters for the TFL Line API about the transports modes">here</a>.</p>
+<!-- This opens the unordered list using for loops to display list of fares and services in each transport from the mode -->
+<div>
+    <ul class="content-box">
+        {% for listofmodes in data %}
+            <li class="content-box">
+                <span>Type of API: {{ listofmodes["$type"] }}</span>
+                <p>Name of transport mode: {{ listofmodes["modeName"] }}</p>
+                <p>TFL service: {{ listofmodes["isTflService"] }}</p>
+                <p>Payment of fares: {{ listofmodes["isFarePaying"] }}</p>
+                <p>Scheduled service: {{ listofmodes["isScheduledService"] }}</p>
+            </li>
+        {% endfor %}
+    </ul> <!-- This closes the unordered list about the valid transport modes -->
+</div>
+
+<script>
+    function toggleMode() {
+        document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode');
+    }
+    
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.add('light-mode');
+    }
+</script>
+{% endblock content %} <!-- This is the closing block that does not allow more content of program codes to be entered above-->

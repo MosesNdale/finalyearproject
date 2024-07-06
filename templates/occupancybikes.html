@@ -1,0 +1,77 @@
+{% extends "layout.html" %} <!-- This extends the layout.html template as parent to another template, which is this template as child -->
+{% block content %} <!-- This is the opening block allowing contents of program codes to be written below -->
+<!-- This is the settings as the style for creating the background image of the website -->
+<style>
+    body {
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .light-mode {
+        background-image:url('static/wallpaper.jpeg');
+        --bg-color: white;
+        --text-color: black;
+    }
+    .dark-mode {
+        background-image:url('static/darkmode-wallpaper.jpg');
+        --bg-color: #5F5F5F;
+        --text-color: white;
+    }
+    .content-box {
+        border: 2px solid var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .toggle-button {
+        cursor: pointer;
+        display: block;
+        margin: auto;
+    }
+</style>
+
+<button class="toggle-button" onclick="toggleMode()">Click this button here to change towards light or dark mode with the style of text</button>
+
+<!-- This is the header to give the title as a purpose of this website page -->
+<h3 class="content-box">TFL API Occupancy for the bikepoint</h3>
+<!-- This is the paragraph provididng the information about the occupancy of a bikepoint with a link to read this API in JSON -->
+<p class="content-box">This information about the API occupany of bikepoints from TFL is written in human-readable format, to read the information from TFL in machine-readable format as the API, click <a href="{{ url_for('bikeoccupancy_form') }}" title="This is the machine-readable format link to view the parameters for the TFL API occupancy bikepoints.">here</a>.</p>
+<!-- This is the form created for getting the occupancy of a bikepoint by entering its Id and submitting the button to get the response -->
+<form action="{{ url_for('occupancyofbikes') }}" method="post">
+    <label for="ids" class="content-box">Enter a Bikepoint ID:</label>
+    <input type="text" style="border: 2px solid black;" name="ids" id="ids" required>
+    <button type="button" title="If you need help to enter the bikepoint Id, read here. Please enter in the english language.">Click <a href="{{ url_for('bikepointareas') }}">here</a> to get the Id of all bikepoints available or click <a href="{{ url_for('bikepoint_names') }}">here</a> to get the specific Id of the bikepoint based on its common name that is available.</button>
+    <br><br>
+    <button type="submit">This gets the bikepoint information for occupancy using its Id. Press this submit button here to get your result after you have completed this form.</button>
+</form>
+<!-- This opens the unordered list using for loops to display the result of the number of bikes parked in a bikepoint from a location -->
+<div>
+    <ul class="content-box">
+        {% for bikepoints in data %}
+            <li class="content-box">
+                <span>Type of TFL API: {{ bikepoints["$type"] }}</span>
+                <p>Bikepoint ID: {{ bikepoints["id"] }}</p>
+                <p>Location: {{ bikepoints["name"] }}</p>
+                <p>Number of bikes parked on the spaces: {{ bikepoints["bikesCount"] }}</p>
+                <p>Empty bike parking spaces: {{ bikepoints["emptyDocks"] }}</p>
+                <p>Total bike parking spaces: {{ bikepoints["totalDocks"] }}</p>
+                <p>Number of standard bikes parked on the spaces: {{ bikepoints["standardBikesCount"] }}</p>
+                <p>Number of electric bikes parked on the spaces: {{ bikepoints["eBikesCount"] }}</p>
+            </li>
+        {% endfor %}
+    </ul> <!-- This closes the unordered list about the parked bikes at a location from a bikepoint --> 
+</div>
+
+<script>
+    function toggleMode() {
+        document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode');
+    }
+    
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.add('light-mode');
+    }
+</script>
+{% endblock content %} <!-- This is the closing block that does not allow more content of program codes to be entered above-->

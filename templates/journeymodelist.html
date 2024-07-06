@@ -1,0 +1,66 @@
+{% extends "layout.html" %} <!-- This extends the layout.html template as parent to another template, which is this template as child -->
+{% block content %} <!-- This is the opening block allowing contents of program codes to be written in below -->
+<!-- This is the settings as the style for creating the background image of the website -->
+<style>
+    body {
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .light-mode {
+        background-image:url('static/wallpaper.jpeg');
+        --bg-color: white;
+        --text-color: black;
+    }
+    .dark-mode {
+        background-image:url('static/darkmode-wallpaper.jpg');
+        --bg-color: #5F5F5F;
+        --text-color: white;
+    }
+    .content-box {
+        border: 2px solid var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .toggle-button {
+        cursor: pointer;
+        display: block;
+        margin: auto;
+    }
+</style>
+<!-- This is the button that is used to enable light or dark mode of the personalised transport planner -->
+<button class="toggle-button" onclick="toggleMode()">Click this button here to change towards light or dark mode with the style of text</button>
+
+<!-- This is the header to give the title as a purpose of this website page -->
+<h3 class="content-box">TFL Journey API to find different kind of transports as modes.</h3>
+<!-- This is the paragraph provididng the information about the list of journey transport modes with a link to read this API in JSON -->
+<p class="content-box">This information about the TFL Journey API is written in human-readable format, to read the information about the types of transports from TFL in machine-readable format as the API, click <a href="{{ url_for('journeymodelist_info') }}" title="This is the machine-readable format link to view the parameters for the TFL Journey API about the transports modes">here</a>.</p>
+<!-- This opens the unordered list using a for loop to display the result of journey transport modes as a list -->
+<div>
+    <ul class="content-box">
+        {% for listofmode in data %}
+            <li class="content-box">
+                <span>Type of API: {{ listofmode["$type"] }}</span>
+                <p>Name of transport mode: {{ listofmode["modeName"] }}</p>
+                <p>TFL service: {{ listofmode["isTflService"] }}</p>
+                <p>Payment of fares: {{ listofmode["isFarePaying"] }}</p>
+                <p>Scheduled service: {{ listofmode["isScheduledService"] }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<script>
+    function toggleMode() {
+        document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode');
+    }
+    
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.add('light-mode');
+    }
+</script>
+{% endblock content %} <!-- This is the closing block that does not allow more content of program codes to be entered in above -->

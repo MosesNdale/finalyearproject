@@ -1,0 +1,83 @@
+{% extends "layout.html" %} <!-- This extends the layout.html template as parent to another template, which is this template as child -->
+{% block content %} <!-- This is the opening block allowing contents of program codes to be written below -->
+<!-- This is the settings as the style for creating the background image of the website -->
+<style>
+    body {
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .light-mode {
+        background-image:url('static/wallpaper.jpeg');
+        --bg-color: white;
+        --text-color: black;
+    }
+    .dark-mode {
+        background-image:url('static/darkmode-wallpaper.jpg');
+        --bg-color: #5F5F5F;
+        --text-color: white;
+    }
+    .content-box {
+        border: 2px solid var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .toggle-button {
+        cursor: pointer;
+        display: block;
+        margin: auto;
+    }
+</style>
+
+<button class="toggle-button" onclick="toggleMode()">Click this button here to change towards light or dark mode with the style of text</button>
+
+<!-- This is the header to give the title as a purpose of this website page -->
+<h3 class="content-box">TFL Road API for road disruptions using the Disruption ID.</h3>
+<!-- This is the paragraph providing the information about road disruptions with a link to read this API in JSON -->
+<p class="content-box">This information about the API Road disruption from TFL is written in human-readable format, to read the information about road disruption from TFL in machine-readable format as the API, click <a href="{{ url_for('roaddisruption_form') }}" title="This is the machine-readable format link to view the parameters for the TFL API road disruptions (using its id).">here</a>.</p>
+<!-- This is the form created for getting the road disruptions by entering the disruption Id from a road and submitting the button to get the response -->
+<form action="{{ url_for('road_disruptions') }}" method="post">
+    <label for="road_disruptionIds" class="content-box">Enter a road disruption ID:</label>
+    <input type="text" name="road_disruptionIds" id="road_disruptionIds" required>
+    <button type="button" title="If you need help to enter a road disruption id, read here">Click <a href="{{ url_for('roadid_finder') }}">here</a> or <a href="{{ url_for('street_disruptions') }}">here</a> to get the disruption id of a road that is available. Note: The road disruption Id starts with TIMS- (with numbers).</button>
+    <br><br>
+    <button type="submit">This gets a list of active road disruptions filtered by a disruption ID. Press this submit button here to get your result after completing the form.</button>
+</form>
+<!-- This opens the unordered list using for loops to display list of the data, casualty and vehicle reports from accident stats -->
+<div>    
+    <ul class="content-box">
+        {% for roadDisruption in data %}
+            <li class="content-box">
+                <p>Type of API: {{ roadDisruption["$type"] }}</p>
+                <p>Location of road disruption: {{ roadDisruption["location"] }}</p>
+                <p>Road disruption Id: {{ roadDisruption["id"] }}</p>
+                <p>Road disruption message: {{ roadDisruption["comments"] }}</p>
+                <p>The status of road: {{ roadDisruption["status"] }}</p>
+                <p>The level of severity for this road disruption is {{ roadDisruption["severity"] }}</p>
+                <p>The category of the disrupted road that is taking place is {{ roadDisruption["category"] }}, specifically {{ roadDisruption["subCategory"] }}</p>
+                <p>Current Update: {{ roadDisruption["currentUpdate"] }}</p>
+                <p>Current Update DateTime: {{ roadDisruption["currentUpdateDateTime"] }}</p>
+                <p>The date and time the road disruption started was on {{ roadDisruption["startDateTime"] }}, this will finish on {{ roadDisruption["endDateTime"] }}</p>
+                <p>Level of interest about this road disruption: {{ roadDisruption["levelOfInterest"] }}</p>
+                <p>Road area (Longitude and Latitude): {{ roadDisruption["point"] }}</p>
+                <p>Closures of this road: {{ roadDisruption["hasClosures"] }}</p>
+                <p>Provisional of this road: {{ roadDisruption["isProvisional"] }}</p>
+            </li>
+        {% endfor %}
+    </ul> <!-- This closes the unordered list about the road disruption -->
+</div>
+
+<script>
+    function toggleMode() {
+        document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode');
+    }
+    
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.add('light-mode');
+    }
+</script>
+{% endblock content %} <!-- This is the closing block that does not allow more content of program codes to be entered above-->

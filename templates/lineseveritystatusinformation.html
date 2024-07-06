@@ -1,0 +1,58 @@
+{% extends "layout.html" %} <!-- This extends the layout.html template as parent to another template, which is this template as child -->
+{% block content %} <!-- This is the opening block allowing contents of program codes to be written below -->
+<!-- This is the settings as the style for creating the background image of the website -->
+<style>
+    body {
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .light-mode {
+        background-image:url('static/wallpaper.jpeg');
+        --bg-color: white;
+        --text-color: black;
+    }
+    .dark-mode {
+        background-image:url('static/darkmode-wallpaper.jpg');
+        --bg-color: #5F5F5F;
+        --text-color: white;
+    }
+    .content-box {
+        border: 2px solid var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .toggle-button {
+        cursor: pointer;
+        display: block;
+        margin: auto;
+    }
+</style>
+<!-- This is the button that is used to enable light or dark mode of the personalised transport planner -->
+<button class="toggle-button" onclick="toggleMode()">Click this button here to change towards light or dark mode with the style of text</button>
+
+<!-- This is the header to give the title as a purpose of this website page -->
+<h3 class="content-box">TFL Line API for a valid list of severity codes in machine-format as JSON.</h3>
+<!-- This is the form created for all lines by entering a severity number and submitting the button to get the response -->
+<form action="{{ url_for('lineseveritystatus_info') }}" method="post">
+    <label for="severity_number" class="content-box">Enter a severity level number of a line:</label>
+    <input type="text" name="severity_number" id="severity_number" required>
+    <button type="button" title="If you need help to enter a severity number, read here">Any severity number from 0-20, or click <a href="{{ url_for('lineseverity') }}">here</a> to view the severity numbers of transports.</button>
+    <br><br>
+    <button type="submit">This gets the line status for all lines with a given severity. Press this submit button here to get your result after you have completed this form.</button>
+</form>
+
+<script>
+    function toggleMode() {
+        document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode');
+    }
+    
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.add('light-mode');
+    }
+</script>
+{% endblock content %} <!-- This is the closing block that does not allow more content of program codes to be entered above-->

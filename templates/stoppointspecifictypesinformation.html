@@ -1,0 +1,57 @@
+{% extends "layout.html" %} <!-- This extends the layout.html template as parent to another template, which is this template as child -->
+{% block content %} <!-- This is the opening block allowing contents of program codes to be written below -->
+<!-- This is the settings as the style for creating the background image of the website -->
+<style>
+    body {
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .light-mode {
+        background-image:url('static/wallpaper.jpeg');
+        --bg-color: white;
+        --text-color: black;
+    }
+    .dark-mode {
+        background-image:url('static/darkmode-wallpaper.jpg');
+        --bg-color: #5F5F5F;
+        --text-color: white;
+    }
+    .content-box {
+        border: 2px solid var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .toggle-button {
+        cursor: pointer;
+        display: block;
+        margin: auto;
+    }
+</style>
+<!-- This is the button that is used to enable light or dark mode of the personalised transport planner -->
+<button class="toggle-button" onclick="toggleMode()">Click this button here to change towards light or dark mode with the style of text</button>
+
+<h3 class="content-box">TFL Stop Point API for choosing a specific type of stop point in machine-readable format as the Json format.</h3>
+
+<form action="{{ url_for('stoppointtypes_info') }}" method="post">
+    <label for="stoppoint_specifictypes" class="content-box">Enter a type of stop point:</label>
+    <input type="text" name="stoppoint_specifictypes" id="stoppoint_specifictypes" required>
+    <button type="button" title="If you need help to enter a type of stop point, read here. Please enter in the english language.">Click <a href="{{ url_for('stoppointtype') }}">here</a> to view a type of stoppoint. Examples are NaptanAirAccessArea, NaptanTaxiRank and NaptanMetroStation.</button>
+    <br><br>
+    <button type="submit">This gets all stop points of a given type. Press this submit button here to get your result after you have completed this form.</button>
+</form>
+
+<script>
+    function toggleMode() {
+        document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode');
+    }
+    
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.add('light-mode');
+    }
+</script>
+{% endblock content %} 

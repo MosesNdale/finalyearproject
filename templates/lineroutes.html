@@ -1,0 +1,97 @@
+{% extends "layout.html" %} <!-- This extends the layout.html template as parent to another template, which is this template as child -->
+{% block content %} <!-- This is the opening block allowing contents of program codes to be written below -->
+<!-- This is the settings as the style for creating the background image of the website -->
+<style>
+    body {
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .light-mode {
+        background-image:url('static/wallpaper.jpeg');
+        --bg-color: white;
+        --text-color: black;
+    }
+    .dark-mode {
+        background-image:url('static/darkmode-wallpaper.jpg');
+        --bg-color: #5F5F5F;
+        --text-color: white;
+    }
+    .content-box {
+        border: 2px solid var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .toggle-button {
+        cursor: pointer;
+        display: block;
+        margin: auto;
+    }
+</style>
+<!-- This is the button that is used to enable light or dark mode of the personalised transport planner -->
+<button class="toggle-button" onclick="toggleMode()">Click this button here to change towards light or dark mode with the style of text</button>
+
+<!-- This is the header to give the title as a purpose of this website page -->
+<h3 class="content-box">TFL Line API for the type of service in each route for the start and destination stop points.</h3>
+<!-- This is the paragraph provididng the information about origin and end stops from a transport with a link to read this API in JSON -->
+<p class="content-box">This information about the TFL Line API written in human-readable format, to read the information about type of service in each route for the start and destination stop points as the API, click <a href="{{ url_for('lineroute_form') }}" title="This is the machine-readable format link to view the parameters for the TFL Line API.">here</a>.</p>
+<!-- This is the form created for getting stop routes by entering the mode and service and submitting the button to get the response -->
+<form action="{{ url_for('line_route') }}" method="post">
+    <label for="Line_route" class="content-box">Enter a transport mode:</label>
+    <input type="text" name="Line_route" id="Line_route" required>
+    <button type="button" title="If you need help to enter a transport mode, read here. Please enter in the english language.">Click <a href="{{ url_for('modelist') }}">here</a> to view a transport mode. Examples are tube, bus, national-rail.</button>
+    <br><br>
+    <label for="typeof_service" class="content-box">Enter a type of service for a line:</label>
+    <input type="text" name="typeof_service" id="typeof_service" required>
+    <button type="button" title="If you need help to enter a type of service for a line, read here. Please enter in the english language.">Click <a href="{{ url_for('line_typeservice') }}">here</a> to view the type of service that is provided by the line. Examples are Regular, Night.</button>
+    <br><br>
+    <button type="submit">This gets all lines and their valid routes for given modes, including the name and id of the originating and terminating stops for each route. Press this submit button here to get your result after you have completed this form.</button>
+</form>
+<!-- This opens the unordered list using for loops to display the result of original and terminated stoppoint routes from a line -->
+<div>
+    <ul class="content-box">
+        {% for lineroute in data %}
+            <li class="content-box">
+                <span>Type of API: {{ lineroute["$type"] }}</span>
+                <p>Name of line: {{ lineroute["name"] }}</p>
+                <p>Name of transport mode: {{ lineroute["modeName"] }}</p>
+                <p>Id of line: {{ lineroute["id"] }}</p>
+                <ul>
+                    {% for routeparts in lineroute["routeSections"] %}
+                        <li>
+                            <p>Name of start station and destination station: {{ routeparts["name"] }}</p>
+                            <p>Name of start station: {{ routeparts["originationName"] }}</p>
+                            <p>Name of destination station: {{ routeparts["destinationName"] }}</p>
+                            <p>Direction: {{ routeparts["direction"] }}</p>
+                            <p>Type of service for this route: {{ routeparts["serviceType"] }}</p>
+                            <p>Date and time this information is valid from: {{ routeparts["validFrom"] }}</p>
+                            <p>Date and time this information is valid until: {{ routeparts["validTo"] }}</p>
+                            <ul>
+                                {% for typeservices in lineroute["serviceTypes"] %}
+                                    <li>
+                                        <p><strong>Type of service for this line: {{ typeservices["name"] }}</strong></p>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul> <!-- This closes the unordered list of original and terminated stoppoint routes from a line -->
+</div>
+
+<script>
+    function toggleMode() {
+        document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode');
+    }
+    
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.add('light-mode');
+    }
+</script>
+{% endblock content %} <!-- This is the closing block that does not allow more content of program codes to be entered above-->

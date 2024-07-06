@@ -1,0 +1,84 @@
+{% extends "layout.html" %} <!-- This extends the layout.html template as parent to another template, which is this template as child -->
+{% block content %} <!-- This is the opening block allowing contents of program codes to be written below -->
+<!-- This is the settings as the style for creating the background image of the website -->
+<style>
+    body {
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .light-mode {
+        background-image:url('static/wallpaper.jpeg');
+        --bg-color: white;
+        --text-color: black;
+    }
+    .dark-mode {
+        background-image:url('static/darkmode-wallpaper.jpg');
+        --bg-color: #5F5F5F;
+        --text-color: white;
+    }
+    .content-box {
+        border: 2px solid var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .toggle-button {
+        cursor: pointer;
+        display: block;
+        margin: auto;
+    }
+</style>
+
+<button class="toggle-button" onclick="toggleMode()">Click this button here to change towards light or dark mode with the style of text</button>
+
+<!-- This is the header to give the title as a purpose of this website page -->
+<h3 class="content-box">TFL API for the selected search of place to get all places.</h3>
+<!-- This is the paragraph provididng the information about searching a place with a link to read this API in JSON -->
+<p class="content-box">This information about the API Places search using the common names from TFL is written in human-readable format, to read the information about this in machine-readable format as the API, click <a href="{{ url_for('placesearch_form') }}" title="This is the machine-readable format link to view the parameters for the TFL API type of places selected.">here</a>.</p>
+<!-- This is the form created for getting a valid place by entering a name of a place and submitting the button to get the response -->
+<form action="{{ url_for('selected_placesearch') }}" method="post">
+    <label for="place_names" class="content-box">Enter a common name of a place:</label>
+    <input type="text" name="place_names" id="place_names" required>
+    <button type="button" title="If you need help to enter a type of place, read here">Click <a href="{{ url_for('selected_placetype') }}">here</a> to get a chosen type of place for receiving its commnon name that is available.</button>
+    <br><br>
+    <button type="submit">This gets the search results of a place entered. Press this submit button here to get your result after you have completed this form.</button>
+</form>
+<!-- This opens the unordered list using for loops to display the result of a place providing its name with additional properties info -->
+<div>
+    <ul class="content-box">
+        {% for placesearches in data %}
+            <li class="content-box">
+                <span>Type of API: {{ placesearches["$type"] }}</span>
+                <p>Common name: {{ placesearches["commonName"] }}</p>
+                <p>Place Id: {{ placesearches["id"] }}</p>
+                <p>Type of place: {{ placesearches["placeType"] }}</p>
+                <p>URL: <a href="https://api.tfl.gov.uk{{ placesearches['url'] }}">{{ placesearches["url"] }}</a></p>
+                <p>Latitude: {{ placesearches["lat"] }}</p>
+                <p>Longitude: {{ placesearches["lon"] }}</p>
+                <p><strong>Additional property information: {{ placesearches["$type"] }}</strong></p>
+                <ul>
+                    {% for property in placesearches["additionalProperties"] %}
+                        <li>
+                            <p>The {{ property["category"] }} of {{ property["key"] }} is {{ property["value"] }} in this {{ property["sourceSystemKey"] }}. The information of this place was modified on {{ property["modified"] }}.</p>
+                        </li>
+                        {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul> <!-- This closes the unordered list about searching for a place -->
+</div>
+
+<script>
+    function toggleMode() {
+        document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode');
+    }
+    
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.add('light-mode');
+    }
+</script>
+{% endblock content %} <!-- This is the closing block that does not allow more content of program codes to be entered in -->

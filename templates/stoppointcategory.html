@@ -1,0 +1,71 @@
+{% extends "layout.html" %} <!-- This extends the layout.html template as parent to another template, which is this template as child -->
+{% block content %} <!-- This is the opening block allowing contents of program codes to be written below -->
+<!-- This is the settings as the style for creating the background image of the website -->
+<style>
+    body {
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .light-mode {
+        background-image:url('static/wallpaper.jpeg');
+        --bg-color: white;
+        --text-color: black;
+    }
+    .dark-mode {
+        background-image:url('static/darkmode-wallpaper.jpg');
+        --bg-color: #5F5F5F;
+        --text-color: white;
+    }
+    .content-box {
+        border: 2px solid var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .toggle-button {
+        cursor: pointer;
+        display: block;
+        margin: auto;
+    }
+</style>
+<!-- This is the button that is used to enable light or dark mode of the personalised transport planner -->
+<button class="toggle-button" onclick="toggleMode()">Click this button here to change towards light or dark mode with the style of text</button>
+
+<!-- This is the header to give the title as a purpose of this website page -->
+<h3 class="content-box">TFL API for the stop point category.</h3>
+<!-- This is the paragraph providing the information about categories available in a stop point with a link to read this API in JSON -->
+<p class="content-box">This information about the TFL Stop point API is written in human-readable format about the categories and keys, to read the information in machine-readable format as the API, click <a href="{{ url_for('stoppointcategory_info') }}" title="This is the machine-readable format link to view the parameters for the TFL API Stop point category.">here</a>.</p>
+<!-- This opens the unordered list using for loops to display the result of the stop point categories -->
+<div>
+    <ul class="content-box">
+        {% for stoppoints in data %}
+            <li class="content-box">
+                <span>Type of API: {{ stoppoints["$type"] }}</span>
+                <p>Stoppoint category: {{ stoppoints["category"] }}</p> <!-- These are the names of the stop point category -->
+                <p>The available properties of this {{ stoppoints["category"] }} category are here below:</p>
+                <ul>
+                    {% for key in stoppoints["availableKeys"] %}
+                        <li>
+                            <p>{{ key }}</p> <!-- The keys of the stop point categories is displayed here below -->
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<script>
+    function toggleMode() {
+        document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode');
+    }
+    
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.add('light-mode');
+    }
+</script>
+{% endblock content %} <!-- This is the closing block that does not allow more content of program codes to be entered above-->

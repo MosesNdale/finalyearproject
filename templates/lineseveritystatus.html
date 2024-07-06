@@ -1,0 +1,110 @@
+{% extends "layout.html" %} <!-- This extends the layout.html template as parent to another template, which is this template as child -->
+{% block content %} <!-- This is the opening block allowing contents of program codes to be written below -->
+<!-- This is the settings as the style for creating the background image of the website -->
+<style>
+    body {
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .light-mode {
+        background-image:url('static/wallpaper.jpeg');
+        --bg-color: white;
+        --text-color: black;
+    }
+    .dark-mode {
+        background-image:url('static/darkmode-wallpaper.jpg');
+        --bg-color: #5F5F5F;
+        --text-color: white;
+    }
+    .content-box {
+        border: 2px solid var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .toggle-button {
+        cursor: pointer;
+        display: block;
+        margin: auto;
+    }
+</style>
+<!-- This is the button that is used to enable light or dark mode of the personalised transport planner -->
+<button class="toggle-button" onclick="toggleMode()">Click this button here to change towards light or dark mode with the style of text</button>
+
+<!-- This is the header to give the title as a purpose of this website page -->
+<h3 class="content-box">TFL Line API for a list of severity level codes.</h3>
+<!-- This is the paragraph provididng the information about the status of a line from a severity with a link to read this API in JSON -->
+<p class="content-box">This information about the TFL Line API is written in human-readable format, to read the information about the severity level across the line from TFL in machine-readable format as the API, click <a href="{{ url_for('lineseveritystatus_form') }}" title="This is the machine-readable format link to view the parameters for the TFL Line API about the severity levels affecting transports.">here</a>.</p>
+<!-- This is the form created for getting all lines by entering a severity number and submitting the button to get the response -->
+<form action="{{ url_for('lineseverity_status') }}" method="post">
+    <label for="severity_numbers" class="content-box">Enter a severity level number of a line:</label>
+    <input type="text" name="severity_numbers" id="severity_numbers" required>
+    <button type="button" title="If you need help to enter a severity number, read here">Any severity number from 0-20, or click <a href="{{ url_for('lineseverity') }}">here</a> to view the severity numbers of transports.</button>
+    <br><br>
+    <button type="submit">This gets the line status for all lines with a given severity. Press this submit button here to get your result after you have completed this form.</button>
+</form>
+<!-- This opens the nested unordered list using for loops to display the result of all transports with the severity numbers entered from a line to report any disruptions or to verify if a line provides good service on a transport -->
+<div>
+    <ul class="content-box">
+        {% for severitylines in data %}
+            <li class="content-box">
+                <span>Type of API: {{ severitylines["$type"] }}</span>
+                <p>Name of line: {{ severitylines["name"] }}</p>
+                <p>Name of transport mode: {{ severitylines["modeName"] }}</p>
+                <p>Date and time of the line disruption created (in RFC3339 format): {{ severitylines["created"] }}</p>
+                <p>Date and time of the line disruption modified (in RFC3339 format): {{ severitylines["modified"] }}</p>
+                <ul>
+                    {% for statusline in severitylines["lineStatuses"] %}
+                        <li>
+                            {% if "lineId" in statusline %}
+                            <p>Line Id: {{ statusline["lineId"] }}</p>
+                            {% endif %}
+                            <p>Severity status level number: {{ statusline["statusSeverity"] }}</p>
+                            <p>Severity status description: {{ statusline["statusSeverityDescription"] }}</p>
+                            {% if "reason" in statusline %}
+                            <p>Reason for this line disruption: {{ statusline["reason"] }}</p>
+                            {% endif %}
+                            {% if "disruption" in statusline and "categoryDescription" in statusline["disruption"] %}
+                            <p>Description category of this line disruption: {{ statusline["disruption"]["categoryDescription"] }}</p>
+                            {% endif %}
+                            {% if "disruption" in statusline and "additionalInfo" in statusline["disruption"] %}
+                            <p><u>Extra information about your journey through this line disruption: {{ statusline["disruption"]["additionalInfo"] }}</u></p>
+                            {% endif %}
+                            <ul>
+                                {% for valid in statusline["validityPeriods"] %}
+                                    <li>
+                                        <p>Date and time this line disruption is validated from: {{ valid["fromDate"] }}</p>
+                                        <p>Date and time this line disruption is validated until: {{ valid["toDate"] }}</p>
+                                        <p>Period of the line disruption is happening now: {{ valid["isNow"] }}</p>
+                                        <ul>
+                                            {% for service in severitylines["serviceTypes"] %}
+                                                <li>
+                                                    <p><strong>Type of service taken to fix the line disruption: {{ service["name"] }}</strong></p>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul> <!-- This closes the nested unordered list about the status of a line by a given severity number -->
+</div>
+
+<script>
+    function toggleMode() {
+        document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode');
+    }
+    
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.add('light-mode');
+    }
+</script>
+{% endblock content %} <!-- This is the closing block that does not allow more content of program codes to be entered above-->           

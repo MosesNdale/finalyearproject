@@ -1,0 +1,84 @@
+{% extends "layout.html" %} <!-- This extends the layout.html template as parent to another template, which is this template as child -->
+{% block content %} <!-- This is the opening block allowing contents of program codes to be written below -->
+<!-- This is the settings as the style for creating the background image of the website -->
+<style>
+    body {
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .light-mode {
+        background-image:url('static/wallpaper.jpeg');
+        --bg-color: white;
+        --text-color: black;
+    }
+    .dark-mode {
+        background-image:url('static/darkmode-wallpaper.jpg');
+        --bg-color: #5F5F5F;
+        --text-color: white;
+    }
+    .content-box {
+        border: 2px solid var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .toggle-button {
+        cursor: pointer;
+        display: block;
+        margin: auto;
+    }
+</style>
+
+<button class="toggle-button" onclick="toggleMode()">Click this button here to change towards light or dark mode with the style of text</button>
+
+<!-- This is the header to give the title as a purpose of this website page -->
+<h3 class="content-box">TFL Place API by getting the type of place with its latitude and longitude.</h3>
+<!-- This is the paragraph provididng the information about providing the geographical area to search for a type of place with a link to read this API in JSON -->
+<p class="content-box">This information about the API Places' latitude and longitude from TFL is written in human-readable format, to read the information about its Id from TFL in machine-readable format as the API, click <a href="{{ url_for('placelonlat_form') }}" title="This is the machine-readable format link to view the parameters for the TFL API place areas of latitude and longitude.">here</a>.</p>
+<!-- This is the form created for getting the geographical area for a type of place by entering its type with its latitude and longitude and submitting the button to get the response -->
+<form action="{{ url_for('lonlat_place') }}" method="post">
+    <label for="place_type" class="content-box">Enter a type of place:</label>
+    <input type="text" name="place_type" id="place_type" required>
+    <button type="button" title="If you need help to enter a type of place, read here">Click <a href="{{ url_for('types_places') }}">here</a> to get a type of place that is available.</button>
+    <br><br>
+    <label for="lat" class="content-box">Enter the latitude from the type of place you entered:</label>
+    <input type="text" name="lat" id="lat" required>
+    <button type="button" title="If you need help to enter the latitude of the place, read here. (This includes the longitude of the place too.)">Click <a href="{{ url_for('selected_placetype') }}">here</a> to get a chosen type of place for receiving the latitude of the place that is available.</button>
+    <br><br>
+    <label for="lon" class="content-box">Enter the longitude from the type of place you entered:</label>
+    <input type="text" name="lon" id="lon" required>
+    <button type="button" title="If you need help to enter the longitude of the place, read here. (This includes the latitude of the place too.)">Click <a href="{{ url_for('selected_placetype') }}">here</a> to get a chosen type of place for receiving the longitude of the place that is available.</button>
+    <br><br>
+    <button type="submit">This gets any places of the given type whose geography intersects the given latitude and longitude. Press this submit button here to get your result after you have completed this form.</button>
+</form>
+<!-- This opens the unordered list using for loops to display the result of the type of place with its given latitude and longitude -->
+<div>
+    <ul class="content-box">
+        {% for latlonplaces in data %}
+        <li class="content-box">
+            <span>Type of API: {{ latlonplaces["$type"] }}</span>
+            <p>Place Id: {{ latlonplaces["id"] }}</p>
+            <p>Common name of the place: {{ latlonplaces["commonName"] }}</p>
+            <p>Type of place: {{ latlonplaces["placeType"] }}</p>
+            <p>Latitude: {{ latlonplaces["lat"] }}</p>
+            <p>Longitude: {{ latlonplaces["lon"] }}</p>
+            <p>Place URL: <a href="https://api.tfl.gov.uk{{ latlonplaces['url'] }}">https://api.tfl.gov.uk{{ latlonplaces["url"] }}</a></p>
+        </li>
+        {% endfor %}
+    </ul> <!-- This closes the unordered list about the geographical areas for a type of place -->
+</div>
+
+<script>
+    function toggleMode() {
+        document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode');
+    }
+    
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.add('light-mode');
+    }
+</script>
+{% endblock content %} <!-- This is the closing block that does not allow more content of program codes to be entered above-->

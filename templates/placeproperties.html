@@ -1,0 +1,71 @@
+{% extends "layout.html" %} <!-- This extends the layout.html template as parent to another template, which is this template as child -->
+{% block content %} <!-- This is the opening block allowing contents of program codes to be written below -->
+<!-- This is the settings as the style for creating the background image of the website -->
+<style>
+    body {
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .light-mode {
+        background-image:url('static/wallpaper.jpeg');
+        --bg-color: white;
+        --text-color: black;
+    }
+    .dark-mode {
+        background-image:url('static/darkmode-wallpaper.jpg');
+        --bg-color: #5F5F5F;
+        --text-color: white;
+    }
+    .content-box {
+        border: 2px solid var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .toggle-button {
+        cursor: pointer;
+        display: block;
+        margin: auto;
+    }
+</style>
+
+<button class="toggle-button" onclick="toggleMode()">Click this button here to change towards light or dark mode with the style of text</button>
+
+<!-- This is the header to give the title as a purpose of this website page -->
+<h3 class="content-box">TFL API for the place properties.</h3>
+<!-- This is the paragraph provididng the information about the properties of a place with a link to read this API in JSON -->
+<p class="content-box">This information about the TFL Place property API is written in human-readable format, to read the information in machine-readable format as the API, click <a href="{{ url_for('placeproperty_info') }}" title="This is the machine-readable format link to view the parameters for the TFL API Place property.">here</a>.</p>
+<!-- This opens the unordered list using for loops to display the result of the category and property from each place -->
+<div>
+    <ul class="content-box">
+        {% for propertyofplace in data %}
+            <li class="content-box">
+                <span>Type of API: {{ propertyofplace["$type"] }}</span>
+                <p>Place category: {{ propertyofplace["category"] }}</p>
+                <p>Here are the available place properties for this {{ propertyofplace["category"] }} category below:</p>
+                <ul>
+                    {% for keys in propertyofplace["availableKeys"] %}
+                        <li>
+                            <p>{{ keys }}</p> <!-- The list of place properties is displayed here -->
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul> <!-- This closes the unordered list about the place properties -->
+</div>
+
+<script>
+    function toggleMode() {
+        document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode');
+    }
+    
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.add('light-mode');
+    }
+</script>
+{% endblock content %} <!-- This is the closing block that does not allow more content of program codes to be entered above-->                  

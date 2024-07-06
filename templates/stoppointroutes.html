@@ -1,0 +1,78 @@
+{% extends "layout.html"%}
+{% block content %}
+<!-- This is the settings as the style for creating the background image of the website -->
+<style>
+    body {
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .light-mode {
+        background-image:url('static/wallpaper.jpeg');
+        --bg-color: white;
+        --text-color: black;
+    }
+    .dark-mode {
+        background-image:url('static/darkmode-wallpaper.jpg');
+        --bg-color: #5F5F5F;
+        --text-color: white;
+    }
+    .content-box {
+        border: 2px solid var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .toggle-button {
+        cursor: pointer;
+        display: block;
+        margin: auto;
+    }
+</style>
+<!-- This is the button that is used to enable light or dark mode of the personalised transport planner -->
+<button class="toggle-button" onclick="toggleMode()">Click this button here to change towards light or dark mode with the style of text</button>
+
+<h3 class="content-box">TFL Stop Point API for the route sections for all the lines that provides the service that is available or unavailable from the given stop point ids</h3>
+
+<p class="content-box">This information about the stop point API from TFL is written in human-readable format, to read more infromation about this from TFL in machine-readable format as the API, click <a href="{{ url_for('stoppointroute_form') }}" title="This is the machine-readable format link for the TFL Stop Point API about the routes of a given stop point.">here</a>.</p>
+
+<form action="{{ url_for('stoppoint_route') }}" method="post">
+    <label for="stoppoint_routes" class="content-box">Enter an Id of a stop point:</label>
+    <input type="text" style="border: 1px solid black;" name="stoppoint_routes" id="stoppoint_routes" required>
+    <button type="button" title="If you need help to enter a Stop Point Id on this field, read here. Please enter the values in the english language.">Click <a href="{{ url_for('search_match') }}">here</a> to view a list of Stop point Id to choose from by entering its common names. The examples are 940GZZLUBXN.</button>
+    <br><br>
+    <label for="typesofservice" class="content-box">Enter a type of service for this stop point:</label>
+    <input type="text" style="border: 1px solid black;" name="typesofservice" id="typesofservice" required>
+    <button type="button" title="If you need help to enter a type of service on this field, read here. Please enter the values in the english language.">Click <a href="{{ url_for('line_typeservice') }}">here</a> to view a list of service to choose for your stop point. The values to choose from are 'Regular' or 'Night'.</button>
+    <br><br>
+    <button type="submit">This returns the route sections for all the lines that service the given stop point ids. Press this submit button here to get your result after you have completed this form.</button>
+</form>
+<div>
+    <ul class="content-box">
+        {% for routesdata in data %}
+            <li class="content-box">
+                <span>Type of API: {{ routesdata["$type"] }}</span>
+                <p>Line Id: {{ routesdata["lineId"] }}</p>
+                <p>Naptan Id (This was the stop point Id you have entered): {{ routesdata["naptanId"] }}</p>
+                <p>Name of the stop point route section (origin station - destination station): {{ routesdata["routeSectionName"] }}</p>
+                <p>The canonical direction of this route section is {{ routesdata["direction"] }} of this transport mode {{ routesdata["mode"] }}</p>
+                <p>The date and time of this stop point route section is valid from {{ routesdata["validFrom"] }} until {{ routesdata["validTo"] }}</p>
+                <p>The type of service for this transport mode is {{ routesdata["serviceType"] }} and the availability of this route is {{ routesdata["isActive"] }}</p>
+            </li>   
+        {% endfor %}
+    </ul>
+</div>
+
+<script>
+    function toggleMode() {
+        document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode');
+    }
+    
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.add('light-mode');
+    }
+</script>
+{% endblock content %}

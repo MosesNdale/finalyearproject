@@ -1,0 +1,85 @@
+{% extends "layout.html" %} <!-- This extends the layout.html template as parent to another template, which is this template as child -->
+{% block content %} <!-- This is the opening block allowing contents of program codes to be written below -->
+<!-- This is the settings as the style for creating the background image of the website -->
+<style>
+    body {
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size: 100% 100%;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .light-mode {
+        background-image:url('static/wallpaper.jpeg');
+        --bg-color: white;
+        --text-color: black;
+    }
+    .dark-mode {
+        background-image:url('static/darkmode-wallpaper.jpg');
+        --bg-color: #5F5F5F;
+        --text-color: white;
+    }
+    .content-box {
+        border: 2px solid var(--text-color);
+        background-color: var(--bg-color);
+    }
+    .toggle-button {
+        cursor: pointer;
+        display: block;
+        margin: auto;
+    }
+</style>
+
+<button class="toggle-button" onclick="toggleMode()">Click this button here to change towards light or dark mode with the style of text</button>
+
+<!-- This is the header to give the title as a purpose of this website page -->
+<h3 class="content-box">TFL Road API for street disruptions only.</h3>
+<!-- This is the paragraph providing the information about street disruption with a link to read this API in JSON -->
+<p class="content-box">This information about the Road API from TFL about its disrupted streets is written in human-readable format, to read the information about the disrupted streets along the road from TFL in machine-readable format as the API, click <a href="{{ url_for('streetdisruption_form') }}" title="This is the machine-readable format link to view the parameters for the TFL Road API about street disruptions (using its start and end dates).">here</a>.</p>
+<!-- This is the form created for getting the bikepoint by entering a start date with time and the end date with time for finding any street disruptions within the range as RFC3339 format and submitting the button to get the response -->
+<form action="{{ url_for('street_disruptions') }}" method="post">
+    <label for="startdate" class="content-box">Enter the start date and time for the street disruptions:</label>
+    <input type="text" name="startdate" id="startdate" required>
+    <button type="button" title="If you need help to enter a start date for the street disruptions, read here">The start date and time of the street disruption should be displayed in RFC3339 format, for example 2022-01-01T05:00:00Z</button>
+    <br><br>
+    <label for="enddate" class="content-box">Enter the end date and time for the street disruptions:</label>
+    <input type="text" name="enddate" id="enddate" required>
+    <button type="button" title="If you need help to enter an end date for the street disruptions, read here">The end date and time of the street disruption should be displayed in RFC3339 format, for example 2025-01-01T17:00:00Z</button>
+    <br><br>
+    <button type="submit">This gets a list of disrupted streets. Press this submit button here to get your result after completing this form.</button>
+</form>
+<!-- This opens the unordered list using a for loop to display the result about street disruption between the start and end of the date -->
+<div>
+    <ul class="content-box">
+        {% for streetdisruption in data %}
+            <li class="content-box">
+                <span>Type of API: {{ streetdisruption["$type"] }}</span>
+                <p>The name of the street is {{ streetdisruption["streetName"] }} and it is located in {{ streetdisruption["location"] }}.</p>
+                <p>Disrupted street message: {{ streetdisruption["comments"] }}</p>
+                <p>Road disruption Id: {{ streetdisruption["disruptionId"] }}</p>
+                <p>Disrupted street Id: {{ streetdisruption["distruptedStreetId"] }}</p>
+                <p>Availability of the street: {{ streetdisruption["closure"] }}</p>
+                <p>Directions that affects this disrputed street: {{ streetdisruption["directions"] }}</p>
+                <p>The category of this disrupted street taking place is {{ streetdisruption["category"] }}, specifically {{ streetdisruption["subCategory"] }}.</p>
+                <p>Level of severity: {{ streetdisruption["severity"] }}</p>
+                <p>The date and time the street disruption started on {{ streetdisruption["startDateTime"] }} and will finish until {{ streetdisruption["endDateTime"] }}.</p>
+                <p>Street coordinates: {{ streetdisruption["lineString"] }}</p>
+                <p>The start of the  longitude is {{ streetdisruption["startLon"] }}, the start of the latitude is {{ streetdisruption["startLat"] }}, the end of the longitude is {{ streetdisruption["endLon"] }} and the end of the latitude is {{ streetdisruption["endLat"] }}.</p>
+            </li>
+        {% endfor %}
+    </ul> <!-- This closes the unordered list about the street disruptions -->
+</div>
+
+<script>
+    function toggleMode() {
+        document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode');
+    }
+    
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.add('light-mode');
+    }
+</script>
+{% endblock content %} <!-- This is the closing block that does not allow more content of program codes to be entered above-->       
